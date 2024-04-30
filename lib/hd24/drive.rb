@@ -16,7 +16,7 @@ module HD24
       @drive_info = @fs.read_sector(1, as: Records::DriveInfo, dump: false)
     end
 
-    def show
+    def show_info
       ;;pp(projects:)
     end
 

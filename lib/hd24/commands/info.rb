@@ -2,13 +2,13 @@ module HD24
 
   module Commands
 
-    class Read < Command
+    class Info < Command
 
       def run(args)
         super
         path = args.shift or raise
         @drive = HD24::Drive.open(path)
-        @drive.show
+        @drive.show_info
       end
 
     end

@@ -7,7 +7,8 @@ module HD24
 end
 
 require 'hd24/command'
-require 'hd24/commands/read'
+require 'hd24/commands/extract'
+require 'hd24/commands/info'
 require 'hd24/drive'
 require 'hd24/file_system'
 require 'hd24/records/stringh'
