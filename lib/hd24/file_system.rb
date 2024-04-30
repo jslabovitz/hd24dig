@@ -3,9 +3,9 @@ module HD24
   class FileSystem
 
     attr_accessor :file
-    attr_accessor :dump
 
     SECTOR_SIZE = 512
+    DUMP_PRINTABLE_BYTES = 32..127
 
     include SetParams
 
@@ -13,52 +13,40 @@ module HD24
       new(file: File.open(path), **params)
     end
 
-    def read_sector(num, count: 1, as: nil)
+    def read_sector(num, count: 1, as: nil, dump: false)
       @file.seek(num * SECTOR_SIZE)
       sectors = count.times.map { |i|
-        Sector.new(data: @file.read(SECTOR_SIZE), num: num + i, label: as.to_s.split('::').last)
+        @file.read(SECTOR_SIZE).tap do |sector|
+          dump_sector(sector, num: num + i, label: as&.to_s.split('::').last) if dump
+        end
       }
-      result = as ? as.read(sectors.map(&:data).join) : sectors
-      if @dump
-        sectors.each(&:dump)
-        pp(result.class => result)
+      if as
+        result = as.read(sectors.join)
+        pp(result.class => result) if dump
+        result
+      else
+        sectors
       end
-      result
     end
 
-    class Sector
-
-      attr_accessor :data
-      attr_accessor :num
-      attr_accessor :label
-
-      include SetParams
-
-      WORDS_PER_LINE = 8 * 2
-      PRINTABLE_BYTES = 32..127
-
-      def dump(io=STDOUT)
-        io.puts
-        io.puts "--- sector: #{@num}, label: #{@label || '-'}"
-        0.step(by: WORDS_PER_LINE, to: SECTOR_SIZE - 1) do |offset|
-          io.print '%04x: ' % offset
-          chunk = @data[offset, WORDS_PER_LINE]
-          chunk.unpack('L*').each do |word|
-            io.print '%08x ' % word
-          end
-          io.print ' | '
-          chunk.unpack('L*').each do |word|
-            io.print '%10d ' % word
-          end
-          io.print ' | '
-          chunk.bytes.each do |byte|
-            io.print '%s' % (PRINTABLE_BYTES.include?(byte) ? byte.chr : '.')
-          end
-          # io.print chunk.inspect
-          io.puts
-        end
+    def dump_sector(sector, num:, label:)
+      puts
+      0.step(by: 4, to: SECTOR_SIZE - 1) do |offset|
+        chunk = sector[offset, 4]
+        words = chunk.unpack('L*')
+        bytes = chunk.bytes
+        puts '%7d | 0x%05x         %-10s         + 0x%04x          > %s      %s      %s      %s      %s' % [
+          num,
+          num,
+          label,
+          offset,
+          words.map { |w| '0x%08x' % w }.join(', '),
+          words.map { |w| '%10d' % w }.join(', '),
+          bytes.map { |b| '0x%02x' % b }.join(', '),
+          bytes.map { |b| '%3d' % b }.join(', '),
+          bytes.map { |b| DUMP_PRINTABLE_BYTES.include?(b) ? b.chr : '.' }.join,
+        ]
       end
-
     end
 
   end

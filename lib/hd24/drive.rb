@@ -11,24 +11,21 @@ module HD24
     end
 
     def read
-      @fs = FileSystem.open(@path, dump: true)
-      @superblock = @fs.read_sector(0, as: Records::Superblock)
-      @drive_info = @fs.read_sector(1, as: Records::DriveInfo)
+      @fs = FileSystem.open(@path)
+      @superblock = @fs.read_sector(0, as: Records::Superblock, dump: true)
+      @drive_info = @fs.read_sector(1, as: Records::DriveInfo, dump: false)
     end
 
     def show
-      # ;;pp self
       ;;pp(projects:)
     end
 
     def projects
       @drive_info.sector_pointers_to_all_projects.reject(&:zero?).map do |project_sector|
-        project_info = @fs.read_sector(project_sector, as: Records::ProjectInfo)
-# ;;pp(project_info:)
+        project_info = @fs.read_sector(project_sector, as: Records::ProjectInfo, dump: false)
         songs = project_info.song_info_table.reject(&:zero?).map do |song_sector|
-          song_info = @fs.read_sector(song_sector, count: 2, as: Records::SongInfo)
-# ;;pp(song_info:)
-          # file_allocation_table = @fs.read_sector(song_sector + 2, count: 3, as: Records::FileAllocationTable)
+          song_info = @fs.read_sector(song_sector, count: 2, as: Records::SongInfo, dump: true)
+          # file_allocation_table = @fs.read_sector(song_sector + 2, count: 3, as: Records::FileAllocationTable, dump: true)
           {
             name: song_info.song_name,
             sample_rate: song_info.sample_rate,
