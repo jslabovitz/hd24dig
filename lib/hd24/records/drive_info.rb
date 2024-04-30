@@ -17,7 +17,7 @@ module HD24
       # ?
       uint32
       # 0x10-0x13 (4)  SectorPointer to last active project.
-      uint32 :sector_pointer_to_last_active_project
+      uint32 :sector_of_last_active_project
       # 0x13-0x16 (4)
       uint32
       # 0x16-0x19 (4)
@@ -25,7 +25,7 @@ module HD24
       # ? (4)
       uint32
       # 0x20-  List of 32-bit sector pointers to all projects.
-      array :sector_pointers_to_all_projects, type: :uint32, initial_length: 102
+      array :sectors_of_projects, type: :uint32, initial_length: 102
       # 0x01b8- (64):  64-byte drive name. Null-byte terminated when shorter than 64 chars.
       stringh :drive_name, length: 64
 

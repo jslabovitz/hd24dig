@@ -21,7 +21,7 @@ module HD24
     end
 
     def projects
-      @drive_info.sector_pointers_to_all_projects.reject(&:zero?).map do |project_sector|
+      @drive_info.sectors_of_projects.reject(&:zero?).map do |project_sector|
         project_info = @fs.read_sector(project_sector, as: Records::ProjectInfo, dump: false)
         songs = project_info.song_info_table.reject(&:zero?).map do |song_sector|
           song_info = @fs.read_sector(song_sector, count: 2, as: Records::SongInfo, dump: true)
