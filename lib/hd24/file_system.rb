@@ -1,4 +1,4 @@
-module HD24
+class HD24
 
   class FileSystem
 
@@ -20,13 +20,7 @@ module HD24
           dump_sector(sector, num: num + i, label: as&.to_s.split('::').last) if dump
         end
       }
-      if as
-        result = as.read(sectors.join)
-        pp(result.class => result) if dump
-        result
-      else
-        sectors
-      end
+      as ? as.read(sectors.join) : sectors
     end
 
     def dump_sector(sector, num:, label:)

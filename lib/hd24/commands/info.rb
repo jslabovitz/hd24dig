@@ -1,4 +1,4 @@
-module HD24
+class HD24
 
   module Commands
 
@@ -7,8 +7,8 @@ module HD24
       def run(args)
         super
         path = args.shift or raise
-        @drive = HD24::Drive.open(path)
-        @drive.show_info
+        @drive = HD24.open(path)
+        @drive.print
       end
 
     end

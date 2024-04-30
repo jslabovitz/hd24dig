@@ -1,4 +1,4 @@
-module HD24
+class HD24
 
   class Command < SimpleCommand::Command
 
