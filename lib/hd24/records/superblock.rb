@@ -7,7 +7,9 @@ module HD24
       endian :little
 
       # Offset 0x00-0x0f  Header line:
-      string :header, length: 16
+      stringh :header, length: 8
+      stringh :version, length: 4
+      array :signature, type: :uint8, initial_length: 4
       # 0x10-0x13 (4):  Size of audio block (0x480)
       uint32le :audio_block_size
       # 0x14-0x17 (4):  Number of audio blocks per allocation cluster
