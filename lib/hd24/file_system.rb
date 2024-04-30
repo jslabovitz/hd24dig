@@ -29,10 +29,10 @@ class HD24
         chunk = sector[offset, 4]
         words = chunk.unpack('L*')
         bytes = chunk.bytes
-        puts '%7d | 0x%05x         %-10s         + 0x%04x          > %s      %s      %s      %s      %s' % [
-          num,
-          num,
+        puts '%-10s    %7d | 0x%05x + 0x%04x         %s      %s      %s      %s      %s' % [
           label,
+          num,
+          num,
           offset,
           words.map { |w| '0x%08x' % w }.join(', '),
           words.map { |w| '%10d' % w }.join(', '),
