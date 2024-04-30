@@ -1,6 +1,7 @@
 require 'bindata'
 require 'set_params'
 require 'simple-command'
+require 'simple-printer'
 
 module HD24
 

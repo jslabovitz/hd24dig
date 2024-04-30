@@ -15,6 +15,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'bindata', '~> 2.5'
   gem.add_dependency 'set_params', '~> 0.2'
   gem.add_dependency 'simple-command', '~> 0.7'
+  gem.add_dependency 'simple-printer', '~> 0.3'
 
   gem.add_development_dependency 'bundler', '~> 2.5'
   gem.add_development_dependency 'minitest', '~> 5.22'
