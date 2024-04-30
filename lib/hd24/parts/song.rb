@@ -7,10 +7,13 @@ class HD24
       def printable
         [
           :name,
-          :sample_rate,
-          :bit_depth,
+          [:resolution, 'Resolution', (
+            rate = sample_rate / 1000.0
+            rate_str = (rate == rate.to_i) ? rate.to_i.to_s : '%.1f' % rate
+            '%s/%d' % [rate_str, sample_depth]
+          )],
           :num_tracks,
-          :num_samples,
+          [:duration, 'Duration', '%dm%ds' % [duration / 60, duration % 60]],
         ]
       end
 
@@ -19,19 +22,20 @@ class HD24
       end
 
       def sample_rate
-        @song_info.sample_rate
+        a0, a1, a2 = @song_info.sample_info[1..3].reverse
+        (a0 * 65536) + (a1 * 256) + a2
       end
 
-      def bit_depth
-        @song_info.bit_depth
+      def sample_depth
+        @song_info.sample_info[0]
       end
 
       def num_tracks
         @song_info.num_tracks
       end
 
-      def num_samples
-        @song_info.num_samples
+      def duration
+        @song_info.num_samples / sample_rate
       end
 
       def read(fs:, sector:)
