@@ -40,6 +40,7 @@ class HD24
 
       def read(fs:, sector:)
         @song_info = fs.read_sector(sector, count: 2, as: Records::SongInfo, dump: false)
+# ;;pp(song_info: @song_info)
         # file_allocation_table = @fs.read_sector(sector + 2, count: 3, as: Records::FileAllocationTable, dump: true)
       end
 
