@@ -35,7 +35,11 @@ class HD24
       end
 
       def num_tracks
-        @song_info.num_tracks
+        if high_resolution?
+          @song_info.num_tracks / 2
+        else
+          @song_info.num_tracks
+        end
       end
 
       def duration
@@ -46,6 +50,10 @@ class HD24
         @file_allocation_info.file_allocation_blocks.reject { |info| info.num_audio_blocks == 0 }.map do |info|
           [info.starting_sector_for_audio_block, info.num_audio_blocks]
         end
+      end
+
+      def high_resolution?
+        sample_rate > 48000
       end
 
       def extract_audio(dir, show_progress: false)
