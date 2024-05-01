@@ -8,6 +8,8 @@ class HD24
 
   class UnexpectedData < StandardError; end
 
+  SECTOR_SIZE = 512
+
   def self.open(path)
     fs = FileSystem.open(path)
     HD24::Parts::Drive.read(fs:, sector: 0)

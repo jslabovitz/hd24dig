@@ -4,8 +4,6 @@ class HD24
 
     attr_accessor :file
 
-    SECTOR_SIZE = 512
-
     include SetParams
 
     def self.open(path, **params)
