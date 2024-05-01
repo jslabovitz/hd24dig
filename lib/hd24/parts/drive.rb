@@ -29,14 +29,14 @@ class HD24
 
       def read(sector:)
         @superblock = @fs.read_sector(sector, as: Records::Superblock, dump: false)
-  # ;;pp(superblock: @superblock)
+# ;;pp(superblock: @superblock)
         raise UnexpectedData unless @superblock.header == 'ADAT FST'
         raise UnexpectedData unless @superblock.num_sectors_in_superblock == 1
         raise UnexpectedData unless @superblock.num_sectors_in_drive_info_block == 1
         @drive_info = @fs.read_sector(1, as: Records::DriveInfo, dump: false)
-  # ;;pp(drive_info: @drive_info)
-        @projects = @drive_info.sectors_of_projects.reject(&:zero?).map do |project_sector|
-          Project.read(fs: @fs, sector: project_sector)
+# ;;pp(drive_info: @drive_info)
+        @projects = @drive_info.sectors_of_projects.reject(&:zero?).each_with_index.map do |project_sector, project_num|
+          Project.read(fs: @fs, sector: project_sector, num: project_num)
         end
       end
 

@@ -4,8 +4,11 @@ class HD24
 
     class Song < Part
 
+      attr_accessor :num
+
       def printable
         [
+          [:num, 'Number'],
           :name,
           [:resolution, 'Resolution', (
             rate = sample_rate / 1000.0
