@@ -26,7 +26,11 @@
 - Post announcment to hd24 list.
 - Document classes.
 - Write WAV files natively.
-  - Write multichannel format as option?
+  http://dracoater.blogspot.com/2008/11/comparing-2-audio-wav-files.html?m=1
+  https://stackoverflow.com/questions/48098254/append-pcm-audio-raw-data-into-wav-in-c?rq=1
+  https://stackoverflow.com/questions/19897879/converting-pcm-to-wav-file
+  https://stackoverflow.com/questions/53417630/creating-a-wav-file-from-pcm-data
+    - Write multichannel format as option?
 
 
 ## Later
