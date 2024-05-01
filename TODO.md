@@ -4,19 +4,13 @@
 
 - Make FileSystem.new/.open work like File.
 - Fix 'num_tracks' -- divide by 2 if high-res?
-- Test with high-res files (12 tracks @ 96kHz).
+- Test with high-res files (@ 96kHz).
 - Make 'extract' command to extract projects/songs/tracks.
 - Revert gemspec references to local gems.
+- Rename to 'hd24-extractor' / HD24Extractor / 'HD24 Extractor'
+- Push to Github.
 - Test on old Air.
 - Test with direct drive connection.
-- Write basic README.
-
-
-## Soon
-
-- Push to Github.
-- Post announcment to hd24 list.
-- Document classes.
 - Build test drive:
   - multiple named projects
   - multiple songs
@@ -24,15 +18,23 @@
   - songs with multiple blocks (add to existing song after new song?)
   - deleted songs/projects
 - Improve tests to check for above.
+- Write basic README.
+
+
+## Soon
+
+- Push to Rubygems.
+- Post announcment to hd24 list.
+- Document classes.
 - Write WAV files natively.
   - Write multichannel format as option?
-- Show extraction progress with tty-progress.
-    https://github.com/piotrmurach/tty-progressbar
-- Implement interactive mode.
 
 
 ## Later
 
+- Show extraction progress with tty-progress.
+    https://github.com/piotrmurach/tty-progressbar
+- Implement interactive mode.
 - Design 'distilled' format that only contains blocks actually in use.
   - First part of file has sector index.
   - Can be run on connected drive, then later operations work on distilled format.
