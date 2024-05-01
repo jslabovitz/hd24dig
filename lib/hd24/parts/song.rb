@@ -57,6 +57,7 @@ class HD24
       end
 
       def extract_audio(dir, show_progress: false)
+        FileUtils.mkdir_p(dir) unless File.exist?(dir)
         track_paths = num_tracks.times.map do |track|
           File.join(dir, 'Track %02d.pcm' % track)
         end
