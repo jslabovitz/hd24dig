@@ -62,7 +62,7 @@ class HD24
           File.join(dir, 'Track %02d.pcm' % track)
         end
         track_files = track_paths.map do |path|
-          File.open(path, 'w')
+          File.open(path, 'wb')
         end
         audio_block_size = @project.drive.audio_block_size
         sub_block_size = audio_block_size / num_tracks
