@@ -27,7 +27,7 @@ class HD24::Test < Minitest::Test
     project_name = project.name
     assert { project_name == 'Proj Name' }
     # song
-    song = project.songs.find { |s| s.num == 1 }
+    song = project.songs.find { |s| s.num == 2 }
     assert { song != nil }
     song_name = song.name
     assert { song_name == 'Drum Bed' }
