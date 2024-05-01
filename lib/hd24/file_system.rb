@@ -10,7 +10,7 @@ class HD24
     include SetParams
 
     def self.open(path, **params)
-      new(file: File.open(path), **params)
+      new(file: File.open(path, 'rb'), **params)
     end
 
     def read_sector(num, count: 1, as: nil, dump: false, flip: true)
