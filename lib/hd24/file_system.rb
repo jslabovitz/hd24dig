@@ -5,7 +5,6 @@ class HD24
     attr_accessor :file
 
     SECTOR_SIZE = 512
-    DUMP_PRINTABLE_BYTES = 32..127
 
     include SetParams
 
@@ -18,7 +17,10 @@ class HD24
       data = count.times.map { |i|
         sector_data = @file.read(SECTOR_SIZE)
         sector_data = sector_data.unpack('L*').pack('N*') if flip
-        dump_sector(sector_data, num: num + i, label: as&.to_s.split('::').last) if dump
+        if dump
+          prefix = '%-10s    %7d | 0x%05x ' % [as&.to_s.split('::').last, sector + i, sector + i]
+          Simple::Dumper.dump(sector_data, prefix: prefix)
+        end
         sector_data
       }.join
       as&.read(data) || data
@@ -30,26 +32,6 @@ class HD24
 
     def tell
       @file.tell / SECTOR_SIZE
-    end
-
-    def dump_sector(sector, num:, label:)
-      puts
-      0.step(by: 4, to: SECTOR_SIZE - 1) do |offset|
-        chunk = sector[offset, 4]
-        words = chunk.unpack('L*')
-        bytes = chunk.bytes
-        puts '%-10s    %7d | 0x%05x + 0x%04x         %s      %s      %s      %s      %s' % [
-          label,
-          num,
-          num,
-          offset,
-          words.map { |w| '0x%08x' % w }.join(', '),
-          words.map { |w| '%10d' % w }.join(', '),
-          bytes.map { |b| '0x%02x' % b }.join(', '),
-          bytes.map { |b| '%3d' % b }.join(', '),
-          bytes.map { |b| DUMP_PRINTABLE_BYTES.include?(b) ? b.chr : '.' }.join,
-        ]
-      end
     end
 
   end
