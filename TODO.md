@@ -2,7 +2,6 @@
 
 ## Now
 
-- Make FileSystem.new/.open work like File.
 - Fix 'num_tracks' -- divide by 2 if high-res?
 - Test with high-res files (@ 96kHz).
 - Make 'extract' command to extract projects/songs/tracks.

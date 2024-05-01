@@ -9,7 +9,12 @@ class HD24
     include SetParams
 
     def self.open(path, **params)
-      new(file: File.open(path, 'rb'), **params)
+      new(path, **params)
+    end
+
+    def initialize(path, **params)
+      file = File.open(path, 'rb')
+      super(file:, **params)
     end
 
     def read(sector: nil, count: 1, as: nil, dump: false, flip: true)
