@@ -14,6 +14,11 @@ class HD24
           )],
           :num_tracks,
           [:duration, 'Duration', '%dm%ds' % [duration / 60, duration % 60]],
+          [:audio_blocks, 'Audio blocks', (
+            audio_blocks.map do |sector, num_blocks|
+              '%d @ %d' % [num_blocks, sector]
+            end.join(', ')
+          )],
         ]
       end
 
@@ -38,10 +43,17 @@ class HD24
         @song_info.num_samples / sample_rate
       end
 
+      def audio_blocks
+        @file_allocation_info.file_allocation_blocks.reject { |info| info.num_audio_blocks == 0 }.map do |info|
+          [info.starting_sector_for_audio_block, info.num_audio_blocks]
+        end
+      end
+
       def read(fs:, sector:)
         @song_info = fs.read_sector(sector, count: 2, as: Records::SongInfo, dump: false)
 # ;;pp(song_info: @song_info)
-        # file_allocation_table = @fs.read_sector(sector + 2, count: 3, as: Records::FileAllocationTable, dump: true)
+        @file_allocation_info = fs.read_sector(sector + 2, count: 3, as: Records::FileAllocationInfo, dump: false)
+# ;;pp(file_allocation_info: @file_allocation_info)
       end
 
     end
