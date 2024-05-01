@@ -27,17 +27,16 @@ class HD24::Test < Minitest::Test
     project_name = project.name
     assert { project_name == 'Proj Name' }
     # song
-    song = project.songs.first
+    song = project.songs.find { |s| s.num == 1 }
     assert { song != nil }
     song_name = song.name
-    assert { song_name == 'Song Name' }
+    assert { song_name == 'Drum Bed' }
     # audio
-    audio_path = File.join(TMP_PATH, 'audio.pcm')
-    File.open(audio_path, 'w') do |io|
-      song.extract_audio(io)
+    track_paths = song.extract_audio(TMP_PATH)
+    assert { track_paths.length == 8 }
+    track_paths.each do |path|
+      assert { File.size(path) == 16293968 }
     end
-    #FIXME
-    # assert { File.size(audio_path) == 12345 }
   end
 
 end

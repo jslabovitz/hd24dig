@@ -5,6 +5,7 @@ class HD24
     class Song < Part
 
       attr_accessor :num
+      attr_accessor :project
 
       def printable
         [
@@ -17,11 +18,6 @@ class HD24
           )],
           :num_tracks,
           [:duration, 'Duration', '%dm%ds' % [duration / 60, duration % 60]],
-          [:audio_blocks, 'Audio blocks', (
-            audio_blocks.map do |sector, num_blocks|
-              '%d @ %d' % [num_blocks, sector]
-            end.join(', ')
-          )],
         ]
       end
 
@@ -52,17 +48,52 @@ class HD24
         end
       end
 
-      def extract_audio(io)
-        audio_blocks.each do |sector, num_blocks|
-          blocks = fs.read_sector(sector)
-          #FIXME
+      def extract_audio(dir, show_progress: false)
+        track_paths = num_tracks.times.map do |track|
+          File.join(dir, 'Track %02d.pcm' % track)
         end
+        track_files = track_paths.map do |path|
+          File.open(path, 'w')
+        end
+        audio_block_size = @project.drive.audio_block_size
+        sub_block_size = audio_block_size / num_tracks
+        audio_blocks.each do |starting_sector, num_blocks|
+          fs.seek(starting_sector)
+          num_blocks.times do |block_num|
+            ;;STDERR.print '*' if show_progress
+            num_tracks.times do |track|
+              ;;STDERR.print '.' if show_progress
+              data = fs.read(count: sub_block_size, flip: false)
+              track_files[track].write(data)
+            end
+          end
+        end
+        ;;STDERR.puts if show_progress
+        track_files.each(&:close)
+        track_paths.map { |p| convert_pcm_to_wav(p) }
+      end
+
+      def convert_pcm_to_wav(pcm_path)
+        wav_path = pcm_path.sub(/\.pcm/, '.wav')
+        cmd = [
+          'sox',
+          '-t', 'raw',
+          '-r', sample_rate,
+          '-b', 24,
+          '-e', 'signed-integer',
+          pcm_path,
+          wav_path,
+        ].flatten.compact.map(&:to_s)
+        # ;;warn cmd.join(' ')
+        system(*cmd)
+        File.unlink(pcm_path)
+        wav_path
       end
 
       def read(sector:)
-        @song_info = @fs.read_sector(sector, count: 2, as: Records::SongInfo, dump: false)
+        @song_info = @fs.read(sector: sector, count: 2, as: Records::SongInfo)
 # ;;pp(song_info: @song_info)
-        @file_allocation_info = @fs.read_sector(sector + 2, count: 3, as: Records::FileAllocationInfo, dump: false)
+        @file_allocation_info = @fs.read(sector: sector + 2, count: 3, as: Records::FileAllocationInfo)
 # ;;pp(file_allocation_info: @file_allocation_info)
       end
 

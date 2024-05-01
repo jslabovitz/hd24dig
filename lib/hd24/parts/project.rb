@@ -6,6 +6,7 @@ class HD24
 
       attr_accessor :num
       attr_accessor :songs
+      attr_accessor :drive
 
       def printable
         [
@@ -20,9 +21,9 @@ class HD24
       end
 
       def read(sector:)
-        @project_info = @fs.read_sector(sector, as: Records::ProjectInfo, dump: false)
-        @songs = @project_info.song_info_table.reject(&:zero?).each_with_index.map do |song_sector, song_num|
-          Song.read(fs: @fs, sector: song_sector, num: song_num)
+        @project_info = @fs.read(sector: sector, as: Records::ProjectInfo)
+        @songs = @project_info.song_info_table.reject(&:zero?).each_with_index.map do |song_sector, song_idx|
+          Song.read(fs: @fs, sector: song_sector, num: song_idx + 1, project: self)
         end
       end
 
