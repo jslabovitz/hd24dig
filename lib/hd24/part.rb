@@ -2,14 +2,16 @@ class HD24
 
   class Part
 
+    attr_accessor :fs   # file system
+
     include SetParams
     include Simple::Printer::Printable
 
-    def self.read(fs:, sector:, **params)
-      new(**params).tap { |o| o.read(fs:, sector:) }
+    def self.read(sector:, **params)
+      new(**params).tap { |o| o.read(sector:) }
     end
 
-    def read(fs:, sector:)
+    def read(sector:)
       raise NotImplementedError
     end
 

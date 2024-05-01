@@ -49,10 +49,17 @@ class HD24
         end
       end
 
-      def read(fs:, sector:)
-        @song_info = fs.read_sector(sector, count: 2, as: Records::SongInfo, dump: false)
+      def extract_audio(io)
+        audio_blocks.each do |sector, num_blocks|
+          blocks = fs.read_sector(sector)
+          #FIXME
+        end
+      end
+
+      def read(sector:)
+        @song_info = @fs.read_sector(sector, count: 2, as: Records::SongInfo, dump: false)
 # ;;pp(song_info: @song_info)
-        @file_allocation_info = fs.read_sector(sector + 2, count: 3, as: Records::FileAllocationInfo, dump: false)
+        @file_allocation_info = @fs.read_sector(sector + 2, count: 3, as: Records::FileAllocationInfo, dump: false)
 # ;;pp(file_allocation_info: @file_allocation_info)
       end
 
