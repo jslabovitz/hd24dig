@@ -2,10 +2,9 @@ class HD24
 
   module Commands
 
-    class Extract < Command
+    class Extract < SimpleCommand::Command
 
       def run(args)
-        super
         raise NotImplementedError, "Command not implemented"
       end
 

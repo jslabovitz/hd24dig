@@ -14,7 +14,6 @@ class HD24
 
 end
 
-require 'hd24/command'
 require 'hd24/commands/extract'
 require 'hd24/commands/info'
 
