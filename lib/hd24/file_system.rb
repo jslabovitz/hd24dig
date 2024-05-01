@@ -13,12 +13,13 @@ class HD24
       new(file: File.open(path), **params)
     end
 
-    def read_sector(num, count: 1, as: nil, dump: false)
+    def read_sector(num, count: 1, as: nil, dump: false, flip: true)
       @file.seek(num * SECTOR_SIZE)
       sectors = count.times.map { |i|
-        @file.read(SECTOR_SIZE).tap do |sector|
-          dump_sector(sector, num: num + i, label: as&.to_s.split('::').last) if dump
-        end
+        sector = @file.read(SECTOR_SIZE)
+        sector = sector.unpack('L*').pack('N*') if flip
+        dump_sector(sector, num: num + i, label: as&.to_s.split('::').last) if dump
+        sector
       }
       as ? as.read(sectors.join) : sectors
     end

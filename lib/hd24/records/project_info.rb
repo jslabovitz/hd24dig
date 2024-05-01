@@ -4,7 +4,7 @@ class HD24
 
     class ProjectInfo < BinData::Record
 
-      endian :little
+      endian :big
 
       # 0x00 + 8  8-byte project name (obsolete)
       skip length: 8
@@ -22,7 +22,7 @@ class HD24
       skip length: 28
 
       # 0x01b8-  64-byte project name. Null-byte terminated if project name is less than 64 bytes long.
-      stringh :project_name, length: 64
+      stringz :project_name, length: 64
 
     end
 

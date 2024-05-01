@@ -4,14 +4,14 @@ class HD24
 
     class Superblock < BinData::Record
 
-      endian :little
+      endian :big
 
       # Offset 0x00-0x0f  Header line:
-      stringh :header, length: 8
-      stringh :version, length: 4
+      string :header, length: 8
+      string :version, length: 4
       array :signature, type: :uint8, initial_length: 4
       # 0x10-0x13 (4):  Size of audio block (0x480)
-      uint32le :audio_block_size
+      uint32 :audio_block_size
       # 0x14-0x17 (4):  Number of audio blocks per allocation cluster
       uint32 :audio_blocks_per_allocation_cluster
       # 0x18-0x1f (8):  0 ?

@@ -4,7 +4,7 @@ class HD24
 
     class DriveInfo < BinData::Record
 
-      endian :little
+      endian :big
 
       # 0x00-0x07 (8):  8 byte drive name (for compatibility with older ADAT FST versions),
       #                 should be considered obsolete. Replaced by name at offset 01bh.
@@ -27,7 +27,7 @@ class HD24
       # 0x20-  List of 32-bit sector pointers to all projects.
       array :sectors_of_projects, type: :uint32, initial_length: 102
       # 0x01b8- (64):  64-byte drive name. Null-byte terminated when shorter than 64 chars.
-      stringh :drive_name, length: 64
+      stringz :drive_name, length: 64
 
     end
 

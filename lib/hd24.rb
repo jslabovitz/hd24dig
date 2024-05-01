@@ -20,7 +20,6 @@ require 'hd24/commands/info'
 
 require 'hd24/file_system'
 
-require 'hd24/records/stringh'
 require 'hd24/records/drive_info'
 require 'hd24/records/project_info'
 require 'hd24/records/song_info'

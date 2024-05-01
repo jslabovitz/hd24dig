@@ -4,7 +4,7 @@ class HD24
 
     class SongInfo < BinData::Record
 
-      endian :little
+      endian :big
 
       # 0x00 +4    32-bit number indicating no. of audio blocks in song
       uint32 :num_audio_blocks
@@ -29,7 +29,7 @@ class HD24
       # uint8
 
       # Offset 31h    Number of physical tracks used by song.
-      skip to_abs_offset: 0x32
+      skip to_abs_offset: 0x31
       uint8 :num_tracks
 
       # 0x32 +2    Two more filename characters for short filename, used in obsolete FST 1.0 standard.
@@ -77,7 +77,7 @@ class HD24
 
       # 0x3b8 +64  Full song name, max 64 bytes; terminated by null byte when less than 64 bytes
       skip to_abs_offset: 0x3b8
-      stringh :song_name, length: 64
+      stringz :song_name, length: 64
 
     end
 
