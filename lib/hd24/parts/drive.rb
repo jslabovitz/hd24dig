@@ -8,9 +8,7 @@ class HD24
 
       def printable
         [
-          :version,
           :name,
-          [:num_songs, 'Songs'],
           :projects,
         ]
       end
