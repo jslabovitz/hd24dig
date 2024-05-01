@@ -28,7 +28,7 @@ class HD24
       # 0x30-0x33 (4):  2 ? sectornum of song entry usage table?
       uint32 :sector_of_song_entry_usage_table
       # 0x34-0x37 (4):  3 ? sectors in song entry usage table?
-      uint32 :sector_in_song_entry_usage_table
+      uint32 :num_sectors_in_song_entry_usage_table
       # 0x38-0x3b (4):  5 ? sectornum containing allocation info?
       uint32 :sector_of_allocation_info
       # 0x3c-0x3f (4):  15/0fh  - Number of sectors in allocation table?
