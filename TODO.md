@@ -2,6 +2,7 @@
 
 ## Now
 
+- Make FileSystem.new/.open work like File.
 - Fix 'num_tracks' -- divide by 2 if high-res?
 - Test with high-res files (12 tracks @ 96kHz).
 - Make 'extract' command to extract projects/songs/tracks.
@@ -26,6 +27,7 @@
 - Write WAV files natively.
   - Write multichannel format as option?
 - Show extraction progress with tty-progress.
+    https://github.com/piotrmurach/tty-progressbar
 - Implement interactive mode.
 
 
