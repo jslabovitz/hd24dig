@@ -2,22 +2,20 @@
 
 ## Now
 
-- Fix 'num_tracks' -- divide by 2 if high-res?
-- Test with high-res files (@ 96kHz).
 - Make 'extract' command to extract projects/songs/tracks.
-- Revert gemspec references to local gems.
-- Rename to 'hd24-extractor' / HD24Extractor / 'HD24 Extractor'
-- Push to Github.
-- Test on old Air.
-- Test with direct drive connection.
-- Build test drive:
+- Build test drive, and update tests:
   - multiple named projects
   - multiple songs
   - songs at various resolutions and number of tracks
   - songs with multiple blocks (add to existing song after new song?)
   - deleted songs/projects
-- Improve tests to check for above.
+- Test on old Air.
 - Write basic README.
+  - Describe access to /dev/diskN.
+    - Run as sudo (will drop access after opening file).
+- Revert gemspec references to local gems.
+- Rename to 'hd24-extractor' / HD24Extractor / 'HD24 Extractor'
+- Push to Github.
 
 
 ## Soon
