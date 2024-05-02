@@ -35,15 +35,19 @@ class HD24
       end
 
       def num_tracks
-        if high_resolution?
-          @song_info.num_tracks / 2
-        else
-          @song_info.num_tracks
-        end
+        t = @song_info.num_tracks
+        t /= 2 if high_resolution?
+        t
+      end
+
+      def duration_secs
+        secs = @song_info.num_samples.to_f / sample_rate
+        secs *= 2 if high_resolution?
+        secs
       end
 
       def duration
-        @song_info.num_samples / sample_rate
+        Duration.from_seconds(duration_secs)
       end
 
       def audio_blocks
