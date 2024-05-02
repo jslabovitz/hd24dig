@@ -2,23 +2,14 @@ class HD24
 
   class FileSystem
 
-    attr_accessor :file
+    attr_accessor :io
 
     include SetParams
-
-    def self.open(path, **params)
-      new(path, **params)
-    end
-
-    def initialize(path, **params)
-      file = File.open(path, 'rb')
-      super(file:, **params)
-    end
 
     def read(sector: nil, count: 1, as: nil, dump: false, flip: true)
       seek(sector) if sector
       data = count.times.map { |i|
-        sector_data = @file.read(SECTOR_SIZE)
+        sector_data = @io.read(SECTOR_SIZE)
         sector_data = sector_data.unpack('L*').pack('N*') if flip
         if dump
           prefix = '%-10s    %7d | 0x%05x ' % [as&.to_s.split('::').last, sector + i, sector + i]
@@ -30,11 +21,11 @@ class HD24
     end
 
     def seek(sector)
-      @file.seek(sector * SECTOR_SIZE)
+      @io.seek(sector * SECTOR_SIZE)
     end
 
     def tell
-      @file.tell / SECTOR_SIZE
+      @io.tell / SECTOR_SIZE
     end
 
   end

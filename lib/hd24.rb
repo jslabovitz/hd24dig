@@ -11,9 +11,20 @@ class HD24
   SECTOR_SIZE = 512
 
   def self.open(path)
-    fs = FileSystem.open(path)
+    io = File.open(path, 'rb')
+    drop_privileges
+    fs = FileSystem.new(io:)
     HD24::Parts::Drive.read(fs:, sector: 0)
   end
+
+  def self.drop_privileges
+    if ENV['SUDO_USER']   # running under sudo?
+      # ;;warn 'dropping privileges'
+      Process::Sys.setgid(ENV['SUDO_GID'].to_i)
+      Process::Sys.setuid(ENV['SUDO_UID'].to_i)
+    end
+  end
+
 
 end
 
