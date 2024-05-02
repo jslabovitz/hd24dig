@@ -70,18 +70,19 @@ class HD24
         end
         audio_block_size = @project.drive.audio_block_size
         sub_block_size = audio_block_size / num_tracks
+;;STDERR.print "converting #{name} [\##{num}]: " if show_progress
         audio_blocks.each do |starting_sector, num_blocks|
           fs.seek(starting_sector)
           num_blocks.times do |block_num|
-            ;;STDERR.print '*' if show_progress
+;;STDERR.print '*' if show_progress
             num_tracks.times do |track|
-              ;;STDERR.print '.' if show_progress
+;;STDERR.print '.' if show_progress
               data = fs.read(count: sub_block_size, flip: false)
               track_files[track].write(data)
             end
           end
         end
-        ;;STDERR.puts if show_progress
+;;STDERR.puts if show_progress
         track_files.each(&:close)
         track_paths.map { |p| convert_pcm_to_wav(p) }
       end
