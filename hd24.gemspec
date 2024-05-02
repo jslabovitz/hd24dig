@@ -13,6 +13,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   gem.add_dependency 'bindata', '~> 2.5'
+  gem.add_dependency 'path', '~> 2.1'
   gem.add_dependency 'set_params', '~> 0.2'
   gem.add_dependency 'simple-command', '~> 0.7'
   gem.add_dependency 'simple-dumper', '~> 0.1'

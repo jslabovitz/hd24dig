@@ -1,4 +1,5 @@
 require 'bindata'
+require 'path'
 require 'set_params'
 require 'simple-command'
 require 'simple-dumper'
@@ -11,7 +12,7 @@ class HD24
   SECTOR_SIZE = 512
 
   def self.open(path)
-    io = File.open(path, 'rb')
+    io = Path.new(path).open('rb')
     drop_privileges
     fs = FileSystem.new(io:)
     HD24::Parts::Drive.read(fs:, sector: 0)

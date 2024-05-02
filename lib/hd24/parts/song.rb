@@ -61,12 +61,12 @@ class HD24
       end
 
       def extract_audio(dir, show_progress: false)
-        FileUtils.mkdir_p(dir) unless File.exist?(dir)
+        dir.mkpath unless dir.exist?
         track_paths = num_tracks.times.map do |track|
-          File.join(dir, 'Track %02d.pcm' % track)
+          dir / ('Track %02d.pcm' % track)
         end
         track_files = track_paths.map do |path|
-          File.open(path, 'wb')
+          path.open('wb')
         end
         audio_block_size = @project.drive.audio_block_size
         sub_block_size = audio_block_size / num_tracks
@@ -88,7 +88,7 @@ class HD24
       end
 
       def convert_pcm_to_wav(pcm_path)
-        wav_path = pcm_path.sub(/\.pcm/, '.wav')
+        wav_path = pcm_path.replace_extension('.wav')
         cmd = [
           'sox',
           '-t', 'raw',
@@ -100,7 +100,7 @@ class HD24
         ].flatten.compact.map(&:to_s)
         # ;;warn cmd.join(' ')
         system(*cmd)
-        File.unlink(pcm_path)
+        pcm_path.unlink
         wav_path
       end
 

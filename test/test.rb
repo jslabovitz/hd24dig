@@ -8,13 +8,13 @@ require 'hd24'
 
 class HD24::Test < Minitest::Test
 
-  IMAGE_PATH = '~/Projects/audio:video/studio/work/hd24-images/main-backup-1.img'
-  TMP_PATH = 'test/tmp'
+  IMAGE_PATH = Path.new('~/Projects/audio:video/studio/work/hd24-images/main-backup-1.img').expand_path
+  TMP_PATH = Path.new('test/tmp')
 
   def setup
-    FileUtils.rm_rf(TMP_PATH) if File.exist?(TMP_PATH)
-    Dir.mkdir(TMP_PATH)
-    @drive = HD24.open(File.expand_path(IMAGE_PATH))
+    TMP_PATH.rmtree if TMP_PATH.exist?
+    TMP_PATH.mkpath
+    @drive = HD24.open(IMAGE_PATH)
     @project = @drive.projects.first
   end
 
@@ -247,10 +247,10 @@ class HD24::Test < Minitest::Test
       expected_duration = HD24::Duration.from_array(expected[:duration])
       # assert { duration.to_seconds.to_i == expected_duration.to_seconds.to_i }
       assert { sample_rate == expected[:sample_rate] }
-      track_paths = song.extract_audio(File.join(TMP_PATH, song.num.to_s))
+      track_paths = song.extract_audio(TMP_PATH / song.num.to_s)
       assert { track_paths.length == expected[:num_tracks] }
       track_paths.each do |path|
-        assert { File.exist?(path) }
+        assert { path.exist? }
       end
       ;;break
     end
