@@ -20,6 +20,7 @@ end
 require 'hd24/commands/extract'
 require 'hd24/commands/info'
 
+require 'hd24/duration'
 require 'hd24/file_system'
 
 require 'hd24/records/drive_info'

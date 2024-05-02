@@ -17,7 +17,7 @@ class HD24
             '%s/%d' % [rate_str, sample_depth]
           )],
           :num_tracks,
-          [:duration, 'Duration', '%dm%ds' % [duration / 60, duration % 60]],
+          :duration,
         ]
       end
 
