@@ -56,52 +56,86 @@ class HD24
         end
       end
 
+      def audio_block_size
+        @project.drive.audio_block_size
+      end
+
+      def sub_block_size
+        audio_block_size / num_tracks
+      end
+
+      def track_size
+        audio_blocks.map do |starting_sector, num_blocks|
+          num_blocks * sub_block_size * SECTOR_SIZE
+        end.sum
+      end
+
       def high_resolution?
         sample_rate > 48000
       end
 
       def extract_audio(dir, show_progress: false)
-        dir.mkpath unless dir.exist?
-        track_paths = num_tracks.times.map do |track|
-          dir / ('Track %02d.pcm' % track)
-        end
-        track_files = track_paths.map do |path|
-          path.open('wb')
-        end
-        audio_block_size = @project.drive.audio_block_size
-        sub_block_size = audio_block_size / num_tracks
 ;;STDERR.print "converting #{name} [\##{num}]: " if show_progress
+        raise "Directory #{dir.to_s.inspect} exists!" if dir.exist?
+        dir.mkpath
+        tracks = make_tracks(dir)
         audio_blocks.each do |starting_sector, num_blocks|
           fs.seek(starting_sector)
           num_blocks.times do |block_num|
 ;;STDERR.print '*' if show_progress
-            num_tracks.times do |track|
+            tracks.values.each do |io|
 ;;STDERR.print '.' if show_progress
               data = fs.read(count: sub_block_size, flip: false)
-              track_files[track].write(data)
+              io.write(data)
             end
           end
         end
 ;;STDERR.puts if show_progress
-        track_files.each(&:close)
-        track_paths.map { |p| convert_pcm_to_wav(p) }
+        tracks.values.each(&:close)
+        tracks.keys
       end
 
-      def convert_pcm_to_wav(pcm_path)
-        wav_path = pcm_path.replace_extension('.wav')
-        cmd = [
-          'sox',
-          '-t', 'raw',
-          '-r', sample_rate,
-          '-b', 24,
-          '-e', 'signed-integer',
-          pcm_path,
-          wav_path,
-        ].flatten.compact.map(&:to_s)
-        # ;;warn cmd.join(' ')
-        system(*cmd)
-        pcm_path.unlink
-        wav_path
+      def make_tracks(dir)
+        num_tracks.times.map { |i|
+          path = dir / ('Track %02d.wav' % (i + 1))
+          io = path.open('wb')
+          io.write(wav_header(sample_rate:, data_size: track_size))
+          [path, io]
+        }.to_h
+      end
+
+      def wav_header(sample_rate:, data_size:)
+        file_size = data_size + 44   # total file size
+        fmt_size = 16
+        audio_format = 1  # PCM
+        num_channels = 1
+        byte_rate = sample_rate * num_channels * 3
+        block_align = num_channels * 3
+        bits_per_sample = 24
+        [
+          # RIFF header
+          [
+            'RIFF',
+            [file_size].pack('V'),
+            'WAVE',
+          ],
+          # fmt subchunk
+          [
+            'fmt ',
+            [fmt_size].pack('V'),
+            [audio_format].pack('v'),
+            [num_channels].pack('v'),
+            [sample_rate].pack('V'),
+            [byte_rate].pack('V'),
+            [block_align].pack('v'),
+            [bits_per_sample].pack('v'),
+          ],
+          # data subchunk
+          [
+            'data',
+            [data_size].pack('V'),
+          ],
+        ].join
       end
 
       def read(sector:)
