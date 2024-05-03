@@ -3,8 +3,7 @@
 ## Now
 
 - Make 'extract' command take arguments for specific projects/songs/tracks.
-- Show extraction progress with tty-progress.
-    https://github.com/piotrmurach/tty-progressbar
+- Make progress bar dynamically sized.
 - Build test drive, and update tests:
   - multiple named projects
   - multiple songs

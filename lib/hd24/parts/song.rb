@@ -70,27 +70,28 @@ class HD24
         end.sum
       end
 
+      def total_blocks
+        audio_blocks.map { |s, b| b }.sum
+      end
+
       def high_resolution?
         sample_rate > 48000
       end
 
-      def extract_audio(dir, show_progress: false)
-;;STDERR.print "converting #{name} [\##{num}]: " if show_progress
+      def extract_audio(dir, &block)
         raise "Directory #{dir.to_s.inspect} exists!" if dir.exist?
         dir.mkpath
         tracks = make_tracks(dir)
         audio_blocks.each do |starting_sector, num_blocks|
           fs.seek(starting_sector)
           num_blocks.times do |block_num|
-;;STDERR.print '*' if show_progress
+            yield(starting_sector, block_num) if block_given?
             tracks.values.each do |io|
-;;STDERR.print '.' if show_progress
               data = fs.read(count: sub_block_size, flip: false)
               io.write(data)
             end
           end
         end
-;;STDERR.puts if show_progress
         tracks.values.each(&:close)
         tracks.keys
       end
