@@ -2,8 +2,6 @@
 
 ## Now
 
-- Make 'extract' command take arguments for specific projects/songs/tracks.
-- Make progress bar dynamically sized.
 - Build test drive, and update tests:
   - multiple named projects
   - multiple songs
@@ -20,9 +18,13 @@
 
 ## Soon
 
+- Make 'extract' command take arguments for specific projects/songs/tracks.
+- Make progress bar dynamically sized.
+
 - Push to Github.
 - Push to Rubygems.
 - Post announcment to hd24 list.
+
 - Document classes.
 
 
