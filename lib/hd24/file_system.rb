@@ -4,6 +4,8 @@ class HD24
 
     attr_accessor :io
 
+    SECTOR_SIZE = 512
+
     include SetParams
 
     def read(sector: nil, count: 1, as: nil, dump: false, flip: true)

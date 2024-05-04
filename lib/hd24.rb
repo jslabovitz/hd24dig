@@ -10,8 +10,6 @@ class HD24
 
   class UnexpectedData < StandardError; end
 
-  SECTOR_SIZE = 512
-
   def self.open(path)
     io = Path.new(path).open('rb')
     drop_privileges

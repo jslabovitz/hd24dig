@@ -77,7 +77,7 @@ class HD24
 
       def track_size
         audio_blocks.map do |starting_sector, num_blocks|
-          num_blocks * sub_block_size * SECTOR_SIZE
+          num_blocks * sub_block_size * FileSystem::SECTOR_SIZE
         end.sum
       end
 
