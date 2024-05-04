@@ -9,14 +9,13 @@ class HD24
 
       def printable
         [
-          [:num, 'Number'],
           :name,
           :songs,
         ]
       end
 
       def name
-        @project_info.project_name
+        '%02d - %s' % [@num, @project_info.project_name]
       end
 
       def songs

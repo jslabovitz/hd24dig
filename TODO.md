@@ -3,9 +3,6 @@
 ## Now
 
 - Add Command class -- move HD24 class methods into.
-- Improve 'extract' command:
-  - take arguments for specific projects/songs/tracks
-  - take output directory argument
 - Make progress bar dynamically sized.
 - Build test drive, and update tests:
   - multiple named projects
