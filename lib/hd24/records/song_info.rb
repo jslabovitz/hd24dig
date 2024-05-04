@@ -61,6 +61,15 @@ class HD24
       # skip to_abs_offset: 0x37
       # uint8 :bit_depth
 
+      virtual :sample_rate, value: -> {
+        a0, a1, a2 = sample_info[0..2]
+        (a0 * 65536) + (a1 * 256) + a2
+      }
+
+      virtual :sample_depth, value: -> {
+        sample_info[3]
+      }
+
       # 0x38 +4    Unsigned 32-bit number containing number of samples in song.
       skip to_abs_offset: 0x38
       uint32 :num_samples
