@@ -93,10 +93,10 @@ class HD24
       def extract_audio(dir, extension: '.wav', &block)
         pcm_files = make_track_paths(dir:, extension: '.pcm')
         extract_tracks(pcm_files) do
-          yield(:extracting)
+          yield(:extracting) if block_given?
         end
         converted_files = convert_pcm_files(pcm_files, dir:, extension:) do
-          yield(:converting)
+          yield(:converting) if block_given?
         end
         pcm_files.map(&:unlink)
         converted_files
