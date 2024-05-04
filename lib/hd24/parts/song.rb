@@ -9,6 +9,7 @@ class HD24
 
       def printable
         [
+          [:num, 'Number'],
           :name,
           [:resolution, 'Resolution', (
             rate = sample_rate / 1000.0
@@ -21,7 +22,7 @@ class HD24
       end
 
       def name
-        '%02d - %s' % [@num, @song_info.song_name]
+        @song_info.song_name
       end
 
       def full_name_elements
