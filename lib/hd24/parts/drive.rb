@@ -12,7 +12,7 @@ class HD24
       end
 
       def version
-        @superblock.version.sub(/^(\d)(\d+)/, '\1.\2') or raise UnexpectedData
+        @version ||= @superblock.version.sub(/^(\d)(\d+)/, '\1.\2') or raise UnexpectedData
       end
 
       def name
@@ -24,7 +24,7 @@ class HD24
       end
 
       def projects
-        @drive_info.sectors_of_projects.reject(&:zero?).each_with_index.map do |project_sector, project_idx|
+        @projects ||= @drive_info.sectors_of_projects.reject(&:zero?).each_with_index.map do |project_sector, project_idx|
           Project.read(fs: @fs, sector: project_sector, num: project_idx + 1, drive: self)
         end
       end

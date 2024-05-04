@@ -26,11 +26,11 @@ class HD24
       end
 
       def full_name_elements
-        [project.drive.name, project.name, name]
+        @full_name_elements ||= [project.drive.name, project.name, name]
       end
 
       def full_name
-        full_name_elements.join(' / ')
+        @full_name ||= full_name_elements.join(' / ')
       end
 
       def sample_rate
@@ -59,11 +59,11 @@ class HD24
       end
 
       def duration
-        Duration.from_seconds(duration_secs)
+        @duration ||= Duration.from_seconds(duration_secs)
       end
 
       def audio_blocks
-        @file_allocation_info.file_allocation_blocks.reject { |info| info.num_audio_blocks == 0 }.map do |info|
+        @audio_blocks ||= @file_allocation_info.file_allocation_blocks.reject { |info| info.num_audio_blocks == 0 }.map do |info|
           [info.starting_sector_for_audio_block, info.num_audio_blocks]
         end
       end
@@ -73,17 +73,17 @@ class HD24
       end
 
       def sub_block_size
-        audio_block_size / num_actual_tracks
+        @sub_block_size ||= audio_block_size / num_actual_tracks
       end
 
       def track_size
-        audio_blocks.map do |starting_sector, num_blocks|
+        @track_size ||= audio_blocks.map do |starting_sector, num_blocks|
           num_blocks * sub_block_size * FileSystem::SECTOR_SIZE
         end.sum
       end
 
       def total_blocks
-        audio_blocks.map { |s, b| b }.sum
+        @total_blocks ||= audio_blocks.map { |s, b| b }.sum
       end
 
       def high_resolution?
