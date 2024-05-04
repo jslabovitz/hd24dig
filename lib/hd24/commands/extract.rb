@@ -19,7 +19,7 @@ class HD24
           next if @projects && !@projects.include?(project.num)
           project.songs.each do |song|
             next if @songs && !@songs.include?(song.num)
-            dir = @output_dir.join(project.name, '%02d - %s' % [song.num, song.name])
+            dir = @output_dir.join(drive.name, project.name, '%02d - %s' % [song.num, song.name])
             dir.mkpath
             bar = TTY::ProgressBar.new("extracting: :name :phase :bar ",
               total: song.total_extraction_steps,
