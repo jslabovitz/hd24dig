@@ -2,7 +2,6 @@
 
 ## Now
 
-- Add Command class -- move HD24 class methods into.
 - Make progress bar dynamically sized.
 - Build test drive, and update tests:
   - multiple named projects
@@ -12,7 +11,7 @@
   - deleted songs/projects
 - Test on old Air.
 - Revert gemspec references to local gems.
-- Ensure all dependent gems are pushed/published.
+- Ensure all dependent gems are pushed/published:
   - simple_option_parser
   - simple-command
   - hashstruct
@@ -25,6 +24,7 @@
 - Write basic README.
   - Describe access to raw drive, via /dev/diskN.
     - Run as sudo (will drop access after opening file).
+  - Difficulty in referring to project/song names/numbers.
 - Push to Github.
 - Push to Rubygems.
 - Post announcment to hd24 list.
@@ -34,8 +34,8 @@
 
 ## Later
 
-- Cache results of methods in Parts that won't change.
 - Allow specific tracks to be extracted.
+- Allow songs/tracks to be extracted without creating directory hierary.
 - Implement interactive mode.
 - Design 'archive' format that only contains blocks actually in use.
   - Write sparse file?
