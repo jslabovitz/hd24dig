@@ -5,13 +5,11 @@ class HD24
     class Extract < SimpleCommand::Command
 
       attr_accessor :output_dir
-      attr_accessor :make_dirs
       attr_accessor :projects
       attr_accessor :songs
 
       def run(args)
         @output_dir = Path.new(@output_dir || '.')
-        @make_dirs = (@make_dirs.nil? || @make_dirs == true)
         @projects = @projects.to_s.split(',')&.map(&:to_i) if @projects
         @songs = @songs.to_s.split(',')&.map(&:to_i) if @songs
         raise SimpleCommand::UsageError, "Project must be specified if songs are specified" if @songs && !@projects
@@ -21,14 +19,13 @@ class HD24
           next if @projects && !@projects.include?(project.num)
           project.songs.each do |song|
             next if @songs && !@songs.include?(song.num)
-            dir = @output_dir
-            dir = dir.join(project.name, song.name) if @make_dirs
+            dir = @output_dir.join(project.name, '%02d - %s' % [song.num, song.name])
             dir.mkpath
             bar = TTY::ProgressBar.new("extracting: :name :phase :bar ",
               total: song.total_extraction_steps,
               width: 50)
             song.extract_audio(dir) do |phase|
-              bar.advance(name: '%-64s' % song.full_name, phase: phase.to_s)
+              bar.advance(name: '%-64s' % dir.relative_to(@output_dir).to_s, phase: phase.to_s)
             end
           end
         end
