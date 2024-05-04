@@ -12,14 +12,15 @@ class HD24
         drive.projects.each do |project|
           project.songs.each do |song|
             name, duration, sample_rate = song.name, song.duration, song.sample_rate
-            song_path = 'Song %02d - %s' % [song.num, song.name]
+            song_path = '%02d - %s' % [song.num, song.name]
             dir = output_dir / drive.name / project.name / song_path
+            dir.mkpath
             full_name = [drive.name, project.name, song.name].join(' / ')
-            bar = TTY::ProgressBar.new("extracting: :name :bar ",
-              total: song.total_blocks,
+            bar = TTY::ProgressBar.new("extracting: :name :phase :bar ",
+              total: song.total_extraction_steps,
               width: 50)
-            song.extract_audio(dir) do |sector, block_num|
-              bar.advance(name: '%-64s' % full_name)
+            song.extract_audio(dir) do |phase|
+              bar.advance(name: '%-64s' % full_name, phase: phase.to_s)
             end
           end
         end

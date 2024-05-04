@@ -16,7 +16,7 @@ class HD24
             rate_str = (rate == rate.to_i) ? rate.to_i.to_s : '%.1f' % rate
             '%s/%d' % [rate_str, sample_depth]
           )],
-          :num_tracks,
+          :num_effective_tracks,
           :duration,
         ]
       end
@@ -34,7 +34,11 @@ class HD24
         @song_info.sample_info[3]
       end
 
-      def num_tracks
+      def num_actual_tracks
+        @song_info.num_tracks
+      end
+
+      def num_effective_tracks
         t = @song_info.num_tracks
         t /= 2 if high_resolution?
         t
@@ -61,7 +65,7 @@ class HD24
       end
 
       def sub_block_size
-        audio_block_size / num_tracks
+        audio_block_size / num_actual_tracks
       end
 
       def track_size
@@ -78,65 +82,99 @@ class HD24
         sample_rate > 48000
       end
 
-      def extract_audio(dir, &block)
-        raise "Directory #{dir.to_s.inspect} exists!" if dir.exist?
-        dir.mkpath
-        tracks = make_tracks(dir)
+      def extract_audio(dir, extension: '.wav', &block)
+        pcm_files = make_track_paths(dir:, extension: '.pcm')
+        extract_tracks(pcm_files) do
+          yield(:extracting)
+        end
+        converted_files = convert_pcm_files(pcm_files, dir:, extension:) do
+          yield(:converting)
+        end
+        pcm_files.map(&:unlink)
+        converted_files
+      end
+
+      def total_extraction_steps
+        total_blocks + num_effective_tracks
+      end
+
+      def make_track_paths(dir:, extension:)
+        num_effective_tracks.times.map do |track|
+          if high_resolution?
+            2.times.map do |subtrack|
+              make_track_path(dir:, track:, subtrack:, extension:)
+            end
+          else
+            make_track_path(dir:, track:, extension:)
+          end
+        end.flatten
+      end
+
+      def make_track_path(dir:, track:, subtrack: nil, extension:)
+        (dir / (
+          'Track %02d%s' % [
+            track + 1,
+            subtrack ? ('-%d' % (subtrack + 1)) : '',
+          ]
+        )).add_extension(extension)
+      end
+
+      def extract_tracks(pcm_files, &block)
+        ios = pcm_files.map { |p| p.open('wb') }
         audio_blocks.each do |starting_sector, num_blocks|
           fs.seek(starting_sector)
           num_blocks.times do |block_num|
-            yield(starting_sector, block_num) if block_given?
-            tracks.values.each do |io|
+            ios.each do |io|
               data = fs.read(count: sub_block_size, flip: false)
               io.write(data)
             end
+            yield(starting_sector, block_num) if block_given?
           end
         end
-        tracks.values.each(&:close)
-        tracks.keys
+        ios.each(&:close)
       end
 
-      def make_tracks(dir)
-        num_tracks.times.map { |i|
-          path = dir / ('Track %02d.wav' % (i + 1))
-          io = path.open('wb')
-          io.write(wav_header(sample_rate:, data_size: track_size))
-          [path, io]
-        }.to_h
-      end
-
-      def wav_header(sample_rate:, data_size:)
-        file_size = data_size + 44   # total file size
-        fmt_size = 16
-        audio_format = 1  # PCM
-        num_channels = 1
-        byte_rate = sample_rate * num_channels * 3
-        block_align = num_channels * 3
-        bits_per_sample = 24
+      def sox_input_arguments(rate:)
         [
-          # RIFF header
-          [
-            'RIFF',
-            [file_size].pack('V'),
-            'WAVE',
-          ],
-          # fmt subchunk
-          [
-            'fmt ',
-            [fmt_size].pack('V'),
-            [audio_format].pack('v'),
-            [num_channels].pack('v'),
-            [sample_rate].pack('V'),
-            [byte_rate].pack('V'),
-            [block_align].pack('v'),
-            [bits_per_sample].pack('v'),
-          ],
-          # data subchunk
-          [
-            'data',
-            [data_size].pack('V'),
-          ],
-        ].join
+          '--type', 'raw',
+          '--rate', rate,
+          '--bits', 24,
+          '--encoding', 'signed-integer',
+          '--channels', 1,
+        ]
+      end
+
+      def convert_pcm_files(pcm_files, dir:, extension:, &block)
+        num_effective_tracks.times.map do |track|
+          converted_file = make_track_path(dir:, track:, extension:)
+          cmd = ['sox']
+          if high_resolution?
+            cmd += [
+              '--combine', 'merge',
+            ]
+            pcm_files[track, 2].each do |pcm_file|
+              cmd += [
+                sox_input_arguments(rate: sample_rate / 2),
+                pcm_file,
+              ]
+            end
+          else
+            cmd += [
+              sox_input_arguments(rate: sample_rate),
+              pcm_files[track],
+            ]
+          end
+          cmd += [
+            '--rate', sample_rate,
+            '--channels', 1,
+          ]
+          cmd << converted_file
+          cmd = cmd.flatten.compact.map(&:to_s)
+          # ;;warn cmd.join(' ')
+          system(*cmd)
+          yield if block_given?
+          converted_file
+        end
       end
 
       def read(sector:)

@@ -248,7 +248,9 @@ class HD24::Test < Minitest::Test
       expected_duration = HD24::Duration.from_array(expected[:duration])
       # assert { duration.to_seconds.to_i == expected_duration.to_seconds.to_i }
       assert { sample_rate == expected[:sample_rate] }
-      track_paths = song.extract_audio(TMP_PATH / song.num.to_s)
+      dir = TMP_PATH / song.num.to_s
+      dir.mkpath
+      track_paths = song.extract_audio(dir)
       assert { track_paths.length == expected[:num_tracks] }
       track_paths.each do |path|
         assert { path.exist? }
