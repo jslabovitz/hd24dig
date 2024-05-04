@@ -4,9 +4,9 @@ require 'minitest/autorun'
 require 'minitest/power_assert'
 
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
-require 'hd24'
+require 'hd24-extractor'
 
-class HD24::Test < Minitest::Test
+class HD24Extractor::Test < Minitest::Test
 
   IMAGE_PATH = Path.new('~/Projects/audio:video/studio/work/hd24-images/main-backup-1.img').expand_path
   TMP_PATH = Path.new('test/tmp')
@@ -14,7 +14,7 @@ class HD24::Test < Minitest::Test
   def setup
     TMP_PATH.rmtree if TMP_PATH.exist?
     TMP_PATH.mkpath
-    @drive = HD24.open(IMAGE_PATH)
+    @drive = HD24Extractor.open(IMAGE_PATH)
     @project = @drive.projects.first
   end
 
@@ -245,7 +245,7 @@ class HD24::Test < Minitest::Test
       expected = EXPECTED_SONGS[i]
       name, duration, sample_rate = song.name, song.duration, song.sample_rate
       assert { name == expected[:name] }
-      expected_duration = HD24::Duration.from_array(expected[:duration])
+      expected_duration = HD24Extractor::Duration.from_array(expected[:duration])
       # assert { duration.to_seconds.to_i == expected_duration.to_seconds.to_i }
       assert { sample_rate == expected[:sample_rate] }
       dir = TMP_PATH / song.num.to_s

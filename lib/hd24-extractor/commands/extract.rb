@@ -1,4 +1,4 @@
-class HD24
+class HD24Extractor
 
   module Commands
 
@@ -14,7 +14,7 @@ class HD24
         @songs = @songs.to_s.split(',')&.map(&:to_i) if @songs
         raise SimpleCommand::UsageError, "Project must be specified if songs are specified" if @songs && !@projects
         drive_path = Path.new(ARGV.first).expand_path
-        drive = HD24.open(drive_path)
+        drive = HD24Extractor.open(drive_path)
         drive.projects.each do |project|
           next if @projects && !@projects.include?(project.num)
           project.songs.each do |song|

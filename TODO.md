@@ -10,7 +10,6 @@
   - songs with multiple blocks (add to existing song after new song?)
   - deleted songs/projects
 - Test on old Air.
-- Rename to 'hd24-extractor' / HD24Extractor / 'HD24 Extractor'
 - Write basic README.
   - Describe access to raw drive, via /dev/diskN.
     - Run as sudo (will drop access after opening file).

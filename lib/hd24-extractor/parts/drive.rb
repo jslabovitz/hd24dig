@@ -1,4 +1,4 @@
-class HD24
+class HD24Extractor
 
   module Parts
 

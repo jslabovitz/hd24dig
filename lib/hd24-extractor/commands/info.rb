@@ -1,4 +1,4 @@
-class HD24
+class HD24Extractor
 
   module Commands
 
@@ -6,7 +6,7 @@ class HD24
 
       def run(args)
         path = args.shift or raise
-        @drive = HD24.open(path)
+        @drive = HD24Extractor.open(path)
         @drive.print
       end
 

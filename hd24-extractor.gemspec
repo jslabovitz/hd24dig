@@ -1,11 +1,11 @@
 Gem::Specification.new do |gem|
-  gem.name          = 'hd24'
+  gem.name          = 'hd24-extractor'
   gem.version       = '0.1'
   gem.authors       = 'John Labovitz'
   gem.email         = 'johnl@johnlabovitz.com'
-  gem.summary       = %q{Reads images from an Alesis HD24 recorder}
-  gem.description   = %q{Reads images from an Alesis HD24 recorder.}
-  gem.homepage      = 'https://github.com/jslabovitz/hd24.git'
+  gem.summary       = %q{Reads images from an Alesis HD24 ADAT audio recorder}
+  gem.description   = %q{Reads images from an Alesis HD24 ADAT audio recorder.}
+  gem.homepage      = 'https://github.com/jslabovitz/hd24-extractor.git'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'hd24'
+require 'hd24-extractor'
 
 SimpleCommand::Commander.new.run(ARGV)
