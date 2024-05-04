@@ -34,12 +34,11 @@ class HD24
       end
 
       def sample_rate
-        a0, a1, a2 = @song_info.sample_info[0..2]
-        (a0 * 65536) + (a1 * 256) + a2
+        @sample_rate ||= @song_info.sample_rate
       end
 
       def sample_depth
-        @song_info.sample_info[3]
+        @sample_depth ||= @song_info.sample_depth
       end
 
       def num_actual_tracks
