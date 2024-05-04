@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'simple-dumper', '~> 0.1'
   gem.add_dependency 'simple-printer', '~> 0.3'
   gem.add_dependency 'tty-progressbar', '~> 0.18'
+  gem.add_dependency 'tty-screen', '~> 0.8'
 
   gem.add_development_dependency 'bundler', '~> 2.5'
   gem.add_development_dependency 'minitest', '~> 5.22'

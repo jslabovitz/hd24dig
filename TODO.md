@@ -2,7 +2,6 @@
 
 ## Now
 
-- Make progress bar dynamically sized.
 - Build test drive, and update tests:
   - multiple named projects
   - multiple songs
