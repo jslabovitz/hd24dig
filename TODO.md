@@ -12,6 +12,11 @@
   - deleted songs/projects
 - Test on old Air.
 - Revert gemspec references to local gems.
+- Ensure all dependent gems are pushed/published.
+  - simple_option_parser
+  - simple-command
+  - hashstruct
+  - etc.
 - Rename to 'hd24-extractor' / HD24Extractor / 'HD24 Extractor'
 
 
@@ -29,6 +34,8 @@
 
 ## Later
 
+- Cache results of methods in Parts that won't change.
+- Allow specific tracks to be extracted.
 - Implement interactive mode.
 - Design 'archive' format that only contains blocks actually in use.
   - Write sparse file?
