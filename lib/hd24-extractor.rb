@@ -29,6 +29,7 @@ class HD24Extractor
 
 end
 
+require 'hd24-extractor/commands/clone'
 require 'hd24-extractor/commands/extract'
 require 'hd24-extractor/commands/info'
 

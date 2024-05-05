@@ -29,6 +29,15 @@ class HD24Extractor
         end
       end
 
+      def clone(to:)
+        Path.new(to).open('wb') do |io|
+          each_used_sector_range do |range|
+            io.seek(range.begin * FileSystem::SECTOR_SIZE)
+            io.write(@fs.read(sector: range.begin, count: range.count, flip: false))
+          end
+        end
+      end
+
       SUPERBLOCK_VALIDATIONS = {
         header: 'ADAT FST',
         version: '110 ',
