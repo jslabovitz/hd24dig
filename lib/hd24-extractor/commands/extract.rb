@@ -8,8 +8,14 @@ class HD24Extractor
       attr_accessor :projects
       attr_accessor :songs
 
+      def self.defaults
+        {
+          output_dir: '.',
+        }
+      end
+
       def run(args)
-        @output_dir = Path.new(@output_dir || '.')
+        @output_dir = Path.new(@output_dir)
         @projects = @projects.to_s.split(',')&.map(&:to_i) if @projects
         @songs = @songs.to_s.split(',')&.map(&:to_i) if @songs
         raise SimpleCommand::UsageError, "Project must be specified if songs are specified" if @songs && !@projects
