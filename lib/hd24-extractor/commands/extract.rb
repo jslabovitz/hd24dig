@@ -1,4 +1,4 @@
-class HD24Extractor
+module HD24Extractor
 
   module Commands
 

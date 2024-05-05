@@ -7,7 +7,7 @@ require 'simple-printer'
 require 'tty-progressbar'
 require 'tty-screen'
 
-class HD24Extractor
+module HD24Extractor
 
   class UnexpectedData < StandardError; end
 
