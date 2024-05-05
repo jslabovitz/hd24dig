@@ -25,8 +25,16 @@ class HD24Extractor
         end
       end
 
-      def read(sector:)
-        @project_info = @fs.read(sector: sector, as: Records::ProjectInfo)
+      def read
+        @project_info = @fs.read(sector: @sector, as: Records::ProjectInfo)
+        @sector_range = Range.new(@sector, @sector)
+      end
+
+      def each_used_sector_range(&block)
+        yield(@sector_range)
+        songs.each do |song|
+          song.each_used_sector_range(&block)
+        end
       end
 
     end

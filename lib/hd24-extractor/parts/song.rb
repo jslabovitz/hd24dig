@@ -184,11 +184,19 @@ class HD24Extractor
         end
       end
 
-      def read(sector:)
-        @song_info = @fs.read(sector: sector, count: 2, as: Records::SongInfo)
+      def read
+        @song_info = @fs.read(sector: @sector, count: 2, as: Records::SongInfo)
 # ;;pp(song_info: @song_info)
-        @file_allocation_info = @fs.read(sector: sector + 2, count: 3, as: Records::FileAllocationInfo)
+        @file_allocation_info = @fs.read(sector: @sector + 2, count: 3, as: Records::FileAllocationInfo)
 # ;;pp(file_allocation_info: @file_allocation_info)
+        @sector_range = Range.new(@sector, @sector + 5 - 1)
+      end
+
+      def each_used_sector_range(&block)
+        yield(@sector_range)
+        audio_blocks.each do |starting_sector, num_blocks|
+          yield(Range.new(starting_sector, starting_sector + (num_blocks * sub_block_size)))
+        end
       end
 
     end

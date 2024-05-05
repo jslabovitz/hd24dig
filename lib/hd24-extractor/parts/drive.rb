@@ -36,8 +36,8 @@ class HD24Extractor
         num_sectors_in_drive_info_block: 1,
       }
 
-      def read(sector:)
-        @superblock = @fs.read(sector: sector, as: Records::Superblock)
+      def read
+        @superblock = @fs.read(sector: @sector, as: Records::Superblock)
 # ;;pp(superblock: @superblock)
         SUPERBLOCK_VALIDATIONS.each do |key, value|
           if value != (value2 = @superblock.send(key))
@@ -46,6 +46,14 @@ class HD24Extractor
         end
         @drive_info = @fs.read(sector: 1, as: Records::DriveInfo)
 # ;;pp(drive_info: @drive_info)
+        @sector_range = Range.new(@sector, @sector + 1)
+      end
+
+      def each_used_sector_range(&block)
+        yield(@sector_range)
+        projects.each do |project|
+          project.each_used_sector_range(&block)
+        end
       end
 
     end
