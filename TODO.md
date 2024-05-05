@@ -2,6 +2,7 @@
 
 ## Now
 
+- Move HD24.open into Drive.
 - Build test drive, and update tests:
   - multiple named projects
   - multiple songs
@@ -18,7 +19,7 @@
 ## Soon
 
 - Push to Github.
-- Push to Rubygems.
+- Release to Rubygems.
 - Post announcment to hd24 list.
 
 
@@ -28,5 +29,3 @@
 - Allow specific tracks to be extracted.
 - Allow songs/tracks to be extracted without creating directory hierary.
 - Implement interactive mode.
-- Design 'archive' format that only contains blocks actually in use.
-  - Write sparse file?
