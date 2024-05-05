@@ -4,7 +4,7 @@ module HD24Extractor
 
     def run(args)
       drive_path = args.shift or raise UsageError, "Must specify drive path"
-      @drive = Parts::Drive.open(drive_path)
+      @drive = Drive.open(drive_path)
       drop_privileges
     end
 

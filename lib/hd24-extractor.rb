@@ -13,13 +13,13 @@ module HD24Extractor
 
 end
 
-require 'hd24-extractor/command'
-require 'hd24-extractor/commands/clone'
-require 'hd24-extractor/commands/extract'
-require 'hd24-extractor/commands/info'
-
 require 'hd24-extractor/duration'
 require 'hd24-extractor/file_system'
+
+require 'hd24-extractor/part'
+require 'hd24-extractor/drive'
+require 'hd24-extractor/project'
+require 'hd24-extractor/song'
 
 require 'hd24-extractor/records/drive_info'
 require 'hd24-extractor/records/file_allocation_info'
@@ -27,7 +27,7 @@ require 'hd24-extractor/records/project_info'
 require 'hd24-extractor/records/song_info'
 require 'hd24-extractor/records/superblock'
 
-require 'hd24-extractor/part'
-require 'hd24-extractor/parts/drive'
-require 'hd24-extractor/parts/project'
-require 'hd24-extractor/parts/song'
+require 'hd24-extractor/command'
+require 'hd24-extractor/commands/clone'
+require 'hd24-extractor/commands/extract'
+require 'hd24-extractor/commands/info'

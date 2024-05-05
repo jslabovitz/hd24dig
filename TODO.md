@@ -2,7 +2,6 @@
 
 ## Now
 
-- Move Parts modules into main.
 - Open FileSystem just like File, with #new or #open.
 - Rename read/seek to read_sector/seek_sector.
 - Add #write_sector to FileSystem.
