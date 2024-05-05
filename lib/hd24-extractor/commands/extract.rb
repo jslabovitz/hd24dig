@@ -13,7 +13,7 @@ class HD24Extractor
         @projects = @projects.to_s.split(',')&.map(&:to_i) if @projects
         @songs = @songs.to_s.split(',')&.map(&:to_i) if @songs
         raise SimpleCommand::UsageError, "Project must be specified if songs are specified" if @songs && !@projects
-        bar_width = TTY::Screen.width - 89  # adjust for bar definition below
+        bar_width = TTY::Screen.width - 91  # adjust for bar definition below
         drive_path = Path.new(ARGV.first).expand_path
         drive = HD24Extractor.open(drive_path)
         drive.projects.each do |project|
@@ -22,7 +22,7 @@ class HD24Extractor
             next if @songs && !@songs.include?(song.num)
             dir = @output_dir.join(drive.name, project.name, '%02d - %s' % [song.num, song.name])
             dir.mkpath
-            bar = TTY::ProgressBar.new("extracting: :name :phase :bar ",
+            bar = TTY::ProgressBar.new("extracting: :name :phase [:bar] ",
               total: song.total_extraction_steps,
               width: bar_width)
             song.extract_audio(dir) do |phase|
