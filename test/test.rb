@@ -14,7 +14,7 @@ class HD24Extractor::Test < Minitest::Test
   def setup
     TMP_PATH.rmtree if TMP_PATH.exist?
     TMP_PATH.mkpath
-    @drive = HD24Extractor.open(IMAGE_PATH)
+    @drive = HD24Extractor::Parts::Drive.open(IMAGE_PATH)
     @project = @drive.projects.first
   end
 

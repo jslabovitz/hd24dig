@@ -4,6 +4,12 @@ class HD24Extractor
 
     class Drive < Part
 
+      def self.open(path)
+        io = Path.new(path).expand_path.open('rb')
+        fs = FileSystem.new(io:)
+        read(fs:, sector: 0)
+      end
+
       def printable
         [
           :name,

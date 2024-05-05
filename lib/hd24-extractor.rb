@@ -11,24 +11,9 @@ class HD24Extractor
 
   class UnexpectedData < StandardError; end
 
-  def self.open(path)
-    io = Path.new(path).open('rb')
-    drop_privileges
-    fs = FileSystem.new(io:)
-    HD24Extractor::Parts::Drive.read(fs:, sector: 0)
-  end
-
-  def self.drop_privileges
-    if ENV['SUDO_USER']   # running under sudo?
-      # ;;warn 'dropping privileges'
-      Process::Sys.setgid(ENV['SUDO_GID'].to_i)
-      Process::Sys.setuid(ENV['SUDO_UID'].to_i)
-    end
-  end
-
-
 end
 
+require 'hd24-extractor/command'
 require 'hd24-extractor/commands/clone'
 require 'hd24-extractor/commands/extract'
 require 'hd24-extractor/commands/info'
