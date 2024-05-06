@@ -6,7 +6,9 @@
   - multiple named projects
   - multiple songs
   - songs at various resolutions and number of tracks
-  - songs with multiple blocks (add to existing song after new song?)
+  - songs with multiple blocks -- esp. after new song!
+    - add new tracks to existing song
+    - add new audio to existing song
   - deleted songs/projects
   - songs with all tracks full of content
     - debug tracks that have empty audio after ~15s?
