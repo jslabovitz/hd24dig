@@ -119,18 +119,17 @@ module HD24Extractor
     end
 
     def extract_tracks(pcm_files, &block)
-      ios = pcm_files.map { |p| p.open('wb') }
+      pcm_ios = pcm_files.map { |p| p.open('wb') }
       audio_blocks.each do |starting_sector, num_blocks|
-        fs.seek(starting_sector)
+        fs.seek_sector(starting_sector)
         num_blocks.times do |block_num|
-          ios.each do |io|
-            data = fs.read(count: sub_block_size, flip: false)
-            io.write(data)
+          pcm_ios.each do |pcm_io|
+            pcm_io.write(fs.read_sectors(sub_block_size))
           end
           yield(starting_sector, block_num) if block_given?
         end
       end
-      ios.each(&:close)
+      pcm_ios.each(&:close)
     end
 
     def sox_input_arguments(rate:)
@@ -177,17 +176,21 @@ module HD24Extractor
     end
 
     def read
-      @song_info = @fs.read(sector: @sector, count: 2, as: Records::SongInfo)
+      range1 = @sector..(@sector + 1)
+      @song_info = read_record(Records::SongInfo, range1)
 # ;;pp(song_info: @song_info)
-      @file_allocation_info = @fs.read(sector: @sector + 2, count: 3, as: Records::FileAllocationInfo)
+
+      range2 = (@sector + 2) .. (@sector + 2 + 5)
+      @file_allocation_info = read_record(Records::FileAllocationInfo, range2)
 # ;;pp(file_allocation_info: @file_allocation_info)
-      @sector_range = Range.new(@sector, @sector + 5 - 1)
+
+      @sector_range = range1.begin..range2.end
     end
 
     def each_used_sector_range(&block)
       yield(@sector_range)
       audio_blocks.each do |starting_sector, num_blocks|
-        yield(Range.new(starting_sector, starting_sector + (num_blocks * sub_block_size)))
+        yield(starting_sector ... (starting_sector + (num_blocks * sub_block_size)))
       end
     end
 

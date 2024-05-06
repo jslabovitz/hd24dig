@@ -24,8 +24,8 @@ module HD24Extractor
     end
 
     def read
-      @project_info = @fs.read(sector: @sector, as: Records::ProjectInfo)
-      @sector_range = Range.new(@sector, @sector)
+      @project_info = read_record(Records::ProjectInfo, @sector)
+      @sector_range = @sector..@sector
     end
 
     def each_used_sector_range(&block)

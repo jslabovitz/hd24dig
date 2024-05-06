@@ -3,8 +3,7 @@ module HD24Extractor
   class Drive < Part
 
     def self.open(path)
-      io = Path.new(path).expand_path.open('rb')
-      fs = FileSystem.new(io:)
+      fs = FileSystem.open(path.to_s, 'rb')
       read(fs:, sector: 0)
     end
 
@@ -34,10 +33,11 @@ module HD24Extractor
     end
 
     def clone(to:)
-      Path.new(to).open('wb') do |io|
-        each_used_sector_range do |range|
-          io.seek(range.begin * FileSystem::SECTOR_SIZE)
-          io.write(@fs.read(sector: range.begin, count: range.count, flip: false))
+      FileSystem.open(to, 'wb') do |to_fs|
+        each_used_sector_range do |sector_range|
+          @fs.seek_sector(sector_range.begin)
+          to_fs.seek_sector(sector_range.begin)
+          to_fs.write(@fs.read_sectors(sector_range.count))
         end
       end
     end
@@ -50,16 +50,16 @@ module HD24Extractor
     }
 
     def read
-      @superblock = @fs.read(sector: @sector, as: Records::Superblock)
+      @superblock = read_record(Records::Superblock, @sector)
 # ;;pp(superblock: @superblock)
       SUPERBLOCK_VALIDATIONS.each do |key, value|
         if value != (value2 = @superblock.send(key))
           raise UnexpectedData, "validation failed: expected #{key} = #{value.inspect}, but was #{value2.inspect}"
         end
       end
-      @drive_info = @fs.read(sector: 1, as: Records::DriveInfo)
+      @drive_info = read_record(Records::DriveInfo, @sector + 1)
 # ;;pp(drive_info: @drive_info)
-      @sector_range = Range.new(@sector, @sector + 1)
+      @sector_range = @sector..(@sector + 1)
     end
 
     def each_used_sector_range(&block)
