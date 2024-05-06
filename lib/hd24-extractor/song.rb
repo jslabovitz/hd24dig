@@ -73,12 +73,6 @@ module HD24Extractor
       @sub_block_size ||= audio_block_size / num_actual_tracks
     end
 
-    def track_size
-      @track_size ||= audio_blocks.map do |starting_sector, num_blocks|
-        num_blocks * sub_block_size * FileSystem::SECTOR_SIZE
-      end.sum
-    end
-
     def total_blocks
       @total_blocks ||= audio_blocks.map { |s, b| b }.sum
     end
