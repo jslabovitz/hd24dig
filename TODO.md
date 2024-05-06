@@ -2,16 +2,17 @@
 
 ## Now
 
-- Open FileSystem just like File, with #new or #open.
-- Rename read/seek to read_sector/seek_sector.
-- Add #write_sector to FileSystem.
 - Build test drive, and update tests:
   - multiple named projects
   - multiple songs
   - songs at various resolutions and number of tracks
   - songs with multiple blocks (add to existing song after new song?)
   - deleted songs/projects
+  - songs with all tracks full of content
+    - debug tracks that have empty audio after ~15s?
 - Test on old Air.
+- Make usage/help output.
+  - Ensure UsageError actually works.
 - Write basic README.
   - Describe access to raw drive, via /dev/diskN.
     - Run as sudo (will drop access after opening file).
@@ -30,4 +31,5 @@
 - Document classes.
 - Allow specific tracks to be extracted.
 - Allow songs/tracks to be extracted without creating directory hierary.
+- Skip empty tracks/songs/projects.
 - Implement interactive mode.
