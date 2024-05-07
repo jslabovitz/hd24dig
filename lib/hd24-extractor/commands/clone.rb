@@ -2,12 +2,13 @@ module HD24Extractor
 
   module Commands
 
-    class Clone < Command
+    class Clone < SimpleCommand::Command
 
       def run(args)
-        super
-        clone_path = args.shift or raise UsageError, "Must specify clone path"
-        @drive.clone(to: clone_path)
+        drive_path = args.shift or raise SimpleCommand::UsageError, "Must specify drive path"
+        clone_path = args.shift or raise SimpleCommand::UsageError, "Must specify clone path"
+        drive = HD24Extractor.open_drive(drive_path)
+        drive.clone(to: clone_path)
       end
 
     end

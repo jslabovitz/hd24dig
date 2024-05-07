@@ -2,4 +2,27 @@
 
 require 'hd24-extractor'
 
-SimpleCommand::Commander.new.run(ARGV)
+begin
+  SimpleCommand::Commander.run(ARGV)
+rescue SimpleCommand::UsageError => error
+  STDERR.print <<~END
+  Error: #{error}
+
+  Usage: #{Path.new($0).basename} COMMAND ARGUMENTS...
+
+  Commands:
+    extract [--projects=PROJECTS] [--songs=SONGS] DRIVE [DIR]
+      Extract tracks from DRIVE. If --projects or --songs is specified, only extract those
+      projects or songs, respectively. Projects or sonsgs should be described by numbers
+      separated by commas; for example, '--songs=1,5,10'. If DIR is specified, files will
+      be saved to that directory. Otherwise, files will be saved in the current working
+      directory.
+
+    info DRIVE
+      Show information about DRIVE.
+
+    clone DRIVE FILE
+      Clone DRIVE to FILE, only copying used sectors.
+  END
+  exit(1)
+end
