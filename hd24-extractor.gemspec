@@ -3,8 +3,8 @@ Gem::Specification.new do |gem|
   gem.version       = '0.1'
   gem.authors       = 'John Labovitz'
   gem.email         = 'johnl@johnlabovitz.com'
-  gem.summary       = %q{Reads images from an Alesis HD24 ADAT audio recorder}
-  gem.description   = %q{Reads images from an Alesis HD24 ADAT audio recorder.}
+  gem.summary       = %q{Extracts audio and other information from an Alesis HD24 ADAT audio recorder}
+  gem.description   = %q{Extracts audio and other information from an Alesis HD24 ADAT audio recorder.}
   gem.homepage      = 'https://github.com/jslabovitz/hd24-extractor.git'
 
   gem.files         = `git ls-files`.split($/)
