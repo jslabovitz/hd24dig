@@ -9,11 +9,7 @@ module HD24Extractor
       [
         [:num, 'Number'],
         :name,
-        [:resolution, 'Resolution', (
-          rate = sample_rate / 1000.0
-          rate_str = (rate == rate.to_i) ? rate.to_i.to_s : '%.1f' % rate
-          '%s/%d' % [rate_str, sample_depth]
-        )],
+        :resolution,
         :num_effective_tracks,
         :duration,
       ]
@@ -33,6 +29,15 @@ module HD24Extractor
 
     def sample_rate
       @sample_rate ||= @song_info.sample_rate
+    end
+
+    def sample_rate_str
+      rate = sample_rate / 1000.0
+      (rate == rate.to_i) ? rate.to_i.to_s : ('%.1f' % rate)
+    end
+
+    def resolution_str
+      '%d/%s' % [sample_depth, sample_rate_str]
     end
 
     def sample_depth
