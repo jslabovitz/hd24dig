@@ -22,8 +22,8 @@ module HD24Extractor
     end
 
     def sample_rate_str
-      rate = sample_rate / 1000.0
-      (rate == rate.to_i) ? rate.to_i.to_s : ('%.1f' % rate)
+      khz = sample_rate / 1000.0
+      ((khz == khz.to_i) ? '%d' : '%.1f') % khz
     end
 
     def resolution_str
