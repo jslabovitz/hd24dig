@@ -5,7 +5,7 @@ Gem::Specification.new do |gem|
   gem.email         = 'johnl@johnlabovitz.com'
   gem.summary       = %q{Extracts audio and other information from an Alesis HD24 ADAT audio recorder}
   gem.description   = %q{Extracts audio and other information from an Alesis HD24 ADAT audio recorder.}
-  gem.homepage      = 'https://github.com/jslabovitz/hd24.git'
+  gem.homepage      = 'https://github.com/jslabovitz/hd24-gem.git'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
