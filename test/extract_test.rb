@@ -8,20 +8,7 @@ module HD24Extractor::Tests
 
     include HD24Extractor::TestUtils
 
-    def setup
-      TMP_DIR.rmtree if TMP_DIR.exist?
-      TMP_DIR.mkpath
-      @drive = HD24Extractor.open_drive(DRIVE_IMAGE_FILE)
-      @project = @drive.projects.first
-    end
-
     EXPECTED_SONGS = [
-      {
-        name: 'Song Name',
-        duration: [0, 0, 7, 0],
-        num_tracks: 8,
-        sample_rate: 48000,
-      },
       {
         name: 'Song Name',
         duration: [0, 0, 7, 0],
@@ -31,15 +18,20 @@ module HD24Extractor::Tests
     ]
 
     def test_extract
-      drive_name = @drive.name
+      TMP_DIR.rmtree if TMP_DIR.exist?
+      TMP_DIR.mkpath
+      drive = HD24Extractor.open_drive(DRIVE_IMAGE_FILE)
+      project = drive.projects.first
+      drive_name = drive.name
       assert { drive_name == 'Drive Name' }
-      assert { @project != nil }
-      project_name = @project.name
+      assert { project != nil }
+      project_name = project.name
       assert { project_name == 'Proj Name' }
-      num_songs = @project.songs.count
+      songs = project.songs
+      num_songs = songs.count
       expected_num_songs = EXPECTED_SONGS.count
       assert { num_songs == expected_num_songs }
-      @project.songs.each_with_index do |song, i|
+      songs.each_with_index do |song, i|
         expected = EXPECTED_SONGS[i]
         name, duration, sample_rate = song.name, song.duration, song.sample_rate
         assert { name == expected[:name] }
