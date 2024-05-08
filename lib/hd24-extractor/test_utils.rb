@@ -94,7 +94,6 @@ module HD24Extractor
           mmc.goto_zero
           mmc.write(track)
           mmc.record_strobe
-          sleep(1)
           make_tone(
             type: 'pluck',
             note: note,
@@ -103,7 +102,6 @@ module HD24Extractor
             output: ['--type', audio_device],
             num_channels: num_tracks,
             channel: track)
-          sleep(1)
           mmc.stop
         end
       ensure
