@@ -30,7 +30,7 @@ module HD24Extractor
       else
         raise "Unknown sectors specification: #{sectors.inspect} (#{sectors.class})"
       end
-;;warn "reading sectors #{sectors.inspect} into #{klass}"
+# ;;warn "reading sectors #{sectors.inspect} into #{klass}"
       @fs.seek_sector(sectors.begin)
       klass.read(@fs.read_sectors(sectors.count).unpack('L*').pack('N*'))
     end
