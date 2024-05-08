@@ -35,11 +35,6 @@ module HD24Extractor
       klass.read(@fs.read_sectors(sectors.count).unpack('L*').pack('N*'))
     end
 
-    def dump_data(data)
-      Simple::Dumper.dump(data,
-        prefix: '%-20s   ' % self.class.name.split('::').last)
-    end
-
   end
 
 end

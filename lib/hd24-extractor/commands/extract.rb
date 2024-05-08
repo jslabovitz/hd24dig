@@ -2,13 +2,13 @@ module HD24Extractor
 
   module Commands
 
-    class Extract < SimpleCommand::Command
+    class Extract < Simple::CommandParser::Command
 
       attr_accessor :projects
       attr_accessor :songs
 
       def run(args)
-        drive_path = args.shift or raise SimpleCommand::UsageError, "Must specify drive path"
+        drive_path = args.shift or raise Simple::CommandParser::UsageError, "Must specify drive path"
         output_dir = Path.new(args.shift || '.')
         drive = HD24Extractor.open_drive(drive_path)
         @projects = @projects.to_s.split(',')&.map(&:to_i) if @projects

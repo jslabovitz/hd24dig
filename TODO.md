@@ -23,9 +23,6 @@
     - debug tracks that have empty audio after ~15s?
 - Test on old Air.
 - Test under sudo.
-- Release all unreleased gems... :(
-    - simple-command (rename to simple-command-parser?)
-    - simple-dumper
 - Write basic README.
   - Describe access to raw drive, via /dev/diskN.
     - Run as sudo (will drop access after opening file).

@@ -3,8 +3,8 @@
 require 'hd24-extractor'
 
 begin
-  SimpleCommand::Commander.run(ARGV)
-rescue SimpleCommand::UsageError => error
+  Simple::CommandParser.run(ARGV)
+rescue Simple::CommandParser::UsageError => error
   STDERR.print <<~END
   Error: #{error}
 
