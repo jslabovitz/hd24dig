@@ -1,12 +1,6 @@
-$VERBOSE = false
+require_relative 'helpers'
 
-require 'minitest/autorun'
-require 'minitest/power_assert'
-
-$LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
-require 'hd24-extractor'
-
-module HD24Extractor
+module HD24Extractor::Tests
 
   class DurationTest < Minitest::Test
 
