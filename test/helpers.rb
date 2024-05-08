@@ -4,10 +4,10 @@ require 'minitest/autorun'
 require 'minitest/power_assert'
 
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
-require 'hd24-extractor'
-require 'hd24-extractor/test_utils'
+require 'hd24'
+require 'hd24/test_utils'
 
-module HD24Extractor
+module HD24
 
   module Tests
 

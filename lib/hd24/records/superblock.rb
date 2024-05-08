@@ -1,4 +1,4 @@
-module HD24Extractor
+module HD24
 
   module Records
 

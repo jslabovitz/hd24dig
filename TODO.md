@@ -6,9 +6,6 @@
 - Clone doesn't seem to be copying enough sectors:
   - ending up with short extracted files
   - add sector-tracing to FileSystem, then compare with cloned sectors
-- Rename to HD24 / bin/hd24?
-  - easier to type
-  - flexible, in case of adding MMC control etc.
 - Build test drive, and update tests:
   - build test harness
   - multiple named projects

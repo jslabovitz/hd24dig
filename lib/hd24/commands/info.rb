@@ -1,4 +1,4 @@
-module HD24Extractor
+module HD24
 
   module Commands
 
@@ -17,7 +17,7 @@ module HD24Extractor
 
       def run(args)
         drive_path = args.shift or raise Simple::CommandParser::UsageError, "Must specify drive path"
-        drive = HD24Extractor.open_drive(drive_path)
+        drive = HD24.open_drive(drive_path)
         table = TTY::Table.new(header: HEADER.keys)
         drive.projects.each do |project|
           project.songs.each do |song|

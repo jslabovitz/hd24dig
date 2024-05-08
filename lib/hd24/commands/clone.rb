@@ -1,4 +1,4 @@
-module HD24Extractor
+module HD24
 
   module Commands
 
@@ -7,7 +7,7 @@ module HD24Extractor
       def run(args)
         drive_path = args.shift or raise Simple::CommandParser::UsageError, "Must specify drive path"
         clone_path = args.shift or raise Simple::CommandParser::UsageError, "Must specify clone path"
-        drive = HD24Extractor.open_drive(drive_path)
+        drive = HD24.open_drive(drive_path)
         drive.clone(to: clone_path)
       end
 

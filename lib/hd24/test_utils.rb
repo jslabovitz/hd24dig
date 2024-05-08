@@ -2,13 +2,13 @@
 #
 # If you need it, simple add:
 #
-#   require 'hd24-extractor/test_utils'
+#   require 'hd24/test_utils'
 
 require 'midi-mmc'
 require 'tty-command'
 require 'unimidi'
 
-module HD24Extractor
+module HD24
 
   module TestUtils
 

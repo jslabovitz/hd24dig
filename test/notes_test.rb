@@ -1,10 +1,10 @@
 require_relative 'helpers'
 
-module HD24Extractor::Tests
+module HD24::Tests
 
   class NotesTest < Minitest::Test
 
-    include HD24Extractor::TestUtils
+    include HD24::TestUtils
 
     def test_notes
       file = TMP_DIR / 'note.wav'

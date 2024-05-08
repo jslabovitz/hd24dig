@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require 'hd24-extractor/test_utils'
+require 'hd24/test_utils'
 
-include HD24Extractor::TestUtils
+include HD24::TestUtils
 
 output = open_midi_device(id: 9)
 

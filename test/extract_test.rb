@@ -1,12 +1,12 @@
 require_relative 'helpers'
 
-module HD24Extractor::Tests
+module HD24::Tests
 
   class ExtractTest < Minitest::Test
 
     DRIVE_IMAGE_FILE = Path.new('~/Projects/audio:video/studio/work/hd24-images/test.hd24').expand_path
 
-    include HD24Extractor::TestUtils
+    include HD24::TestUtils
 
     EXPECTED_SONGS = [
       {
@@ -20,7 +20,7 @@ module HD24Extractor::Tests
     def test_extract
       TMP_DIR.rmtree if TMP_DIR.exist?
       TMP_DIR.mkpath
-      drive = HD24Extractor.open_drive(DRIVE_IMAGE_FILE)
+      drive = HD24.open_drive(DRIVE_IMAGE_FILE)
       project = drive.projects.first
       drive_name = drive.name
       assert { drive_name == 'Drive Name' }
@@ -35,7 +35,7 @@ module HD24Extractor::Tests
         expected = EXPECTED_SONGS[i]
         name, duration, sample_rate = song.name, song.duration, song.sample_rate
         assert { name == expected[:name] }
-        expected_duration = HD24Extractor::Duration.from_array(expected[:duration])
+        expected_duration = HD24::Duration.from_array(expected[:duration])
         assert { duration.to_seconds.to_i == expected_duration.to_seconds.to_i }
         assert { sample_rate == expected[:sample_rate] }
         dir = TMP_DIR / song.num.to_s

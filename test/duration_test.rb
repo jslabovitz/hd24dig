@@ -1,23 +1,23 @@
 require_relative 'helpers'
 
-module HD24Extractor::Tests
+module HD24::Tests
 
   class DurationTest < Minitest::Test
 
     def test_params
-      duration = HD24Extractor::Duration.new(minutes: 5)
+      duration = HD24::Duration.new(minutes: 5)
       assert { duration.minutes == 5 }
       assert { duration.to_seconds == 300 }
     end
 
     def test_array
-      duration = HD24Extractor::Duration.from_array([0, 0, 1, 15])
+      duration = HD24::Duration.from_array([0, 0, 1, 15])
       secs = duration.to_seconds
       assert { secs == 1.5 }
     end
 
     def test_seconds
-      duration = HD24Extractor::Duration.from_seconds(1.5)
+      duration = HD24::Duration.from_seconds(1.5)
       assert { duration.to_array == [0, 0, 1, 15] }
     end
 

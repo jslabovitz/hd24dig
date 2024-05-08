@@ -1,4 +1,4 @@
-module HD24Extractor
+module HD24
 
   module Commands
 
@@ -10,7 +10,7 @@ module HD24Extractor
       def run(args)
         drive_path = args.shift or raise Simple::CommandParser::UsageError, "Must specify drive path"
         output_dir = Path.new(args.shift || '.')
-        drive = HD24Extractor.open_drive(drive_path)
+        drive = HD24.open_drive(drive_path)
         @projects = @projects.to_s.split(',')&.map(&:to_i) if @projects
         @songs = @songs.to_s.split(',')&.map(&:to_i) if @songs
         raise UsageError, "Project must be specified if songs are specified" if @songs && !@projects
