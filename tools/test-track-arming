@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require 'hd24-extractor/test_utils'
+
+include HD24Extractor::TestUtils
+
+output = open_midi_device(id: 9)
+
+mmc = MIDI::MMC.new(output:)
+
+mmc.reset
+
+begin
+  24.times.each do |track|
+    mmc.write(nil)
+    msg = mmc.write(track)
+    pp(track => msg)
+    gets
+  end
+ensure
+  mmc.write(nil)
+  mmc.reset
+end

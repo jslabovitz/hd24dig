@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require 'hd24-extractor/test_utils'
+
+include HD24Extractor::TestUtils
+
+record_test_song(
+  midi_output_device_id: 9,
+  num_tracks: 16,
+  tone_duration: 2,
+  track_rate: 48000,
+  audio_device: ['coreaudio', 'Digiface USB (23801173)'])
