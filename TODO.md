@@ -2,12 +2,12 @@
 
 ## Now
 
-- Rebuild harness.
-- Clone doesn't seem to be copying enough sectors:
-  - ending up with short extracted files
-  - add sector-tracing to FileSystem, then compare with cloned sectors
-- Build test drive, and update tests:
-  - build test harness
+- Make tester work with only two tracks
+  - set up HD24 INPUT SELECT to channels 1 & 2
+  - send tone output to channel (track % 2)
+
+- Expand test harness & tests:
+  - test with connected drive (sudo chmod first)
   - multiple named projects
   - multiple songs
   - songs at various resolutions and number of tracks
@@ -17,8 +17,14 @@
   - deleted songs/projects
   - songs with all tracks full of content
     - debug tracks that have empty audio after ~15s?
+
+- Clone doesn't seem to be copying enough sectors:
+  - ending up with short extracted files
+  - add sector-tracing to FileSystem, then compare with cloned sectors
+  - or disable for now?
+
 - Test on old Air.
-- Test under sudo.
+
 - Write basic README.
   - Describe access to raw drive, via /dev/diskN.
     - Run as sudo (will drop access after opening file).
