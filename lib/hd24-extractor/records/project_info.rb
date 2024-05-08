@@ -19,6 +19,10 @@ module HD24Extractor
       #     Zero char means unused entry.
       array :song_info_table, type: :uint32, initial_length: 99
 
+      virtual :song_info_sectors, value: -> {
+        song_info_table.reject(&:zero?).uniq
+      }
+
       skip length: 28
 
       # 0x01b8-  64-byte project name. Null-byte terminated if project name is less than 64 bytes long.

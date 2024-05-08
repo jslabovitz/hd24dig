@@ -18,7 +18,7 @@ module HD24Extractor
     end
 
     def songs
-      @songs ||= @project_info.song_info_table.reject(&:zero?).each_with_index.map do |song_sector, song_idx|
+      @songs ||= @project_info.song_info_sectors.each_with_index.map do |song_sector, song_idx|
         Song.read(fs: @fs, sector: song_sector, num: song_idx + 1, project: self)
       end
     end
