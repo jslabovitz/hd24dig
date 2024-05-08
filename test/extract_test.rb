@@ -4,14 +4,15 @@ module HD24::Tests
 
   class ExtractTest < Minitest::Test
 
-    DRIVE_IMAGE_FILE = Path.new('~/Projects/audio:video/studio/work/hd24-images/test.hd24').expand_path
+    # DRIVE_IMAGE_FILE = Path.new('~/Projects/audio:video/studio/work/hd24-images/test.hd24').expand_path
+    DRIVE_IMAGE_FILE = Path.new('/dev/disk4').expand_path
 
     include HD24::TestUtils
 
     EXPECTED_SONGS = [
       {
         name: 'Song Name',
-        duration: [0, 0, 7, 0],
+        duration: [0, 0, 2, 0],
         num_tracks: 8,
         sample_rate: 48000,
       },
