@@ -9,7 +9,6 @@
 - Rename to HD24 / bin/hd24?
   - easier to type
   - flexible, in case of adding MMC control etc.
-- Change use of Simple::Printer to TTY::Table?
 - Build test drive, and update tests:
   - build test harness
   - multiple named projects

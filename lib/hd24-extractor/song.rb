@@ -5,16 +5,6 @@ module HD24Extractor
     attr_accessor :num
     attr_accessor :project
 
-    def printable
-      [
-        [:num, 'Number'],
-        :name,
-        :resolution,
-        :num_effective_tracks,
-        :duration,
-      ]
-    end
-
     def name
       @song_info.song_name
     end

@@ -5,14 +5,6 @@ module HD24Extractor
     attr_accessor :num
     attr_accessor :drive
 
-    def printable
-      [
-        [:num, 'Number'],
-        :name,
-        :songs,
-      ]
-    end
-
     def name
       @project_info.project_name
     end

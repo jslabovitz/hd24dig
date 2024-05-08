@@ -7,13 +7,6 @@ module HD24Extractor
       read(fs:, sector: 0)
     end
 
-    def printable
-      [
-        :name,
-        :projects,
-      ]
-    end
-
     def version
       @version ||= @superblock.version.sub(/^(\d)(\d+)/, '\1.\2') or raise UnexpectedData
     end

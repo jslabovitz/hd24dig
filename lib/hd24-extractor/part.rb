@@ -7,7 +7,6 @@ module HD24Extractor
     attr_accessor :sector_range
 
     include SetParams
-    include Simple::Printer::Printable
 
     def self.read(**params)
       new(**params).tap(&:read)
