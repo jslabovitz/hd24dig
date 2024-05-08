@@ -169,7 +169,8 @@ module HD24Extractor
         cmd << converted_file
         cmd = cmd.flatten.compact.map(&:to_s)
         # ;;warn cmd.join(' ')
-        system(*cmd)
+        command = TTY::Command.new(printer: :null)
+        command.run(*cmd)
         yield if block_given?
         converted_file
       end

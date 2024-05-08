@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'simple-command', '~> 0.9'
   gem.add_dependency 'simple-dumper', '~> 0.1'
   gem.add_dependency 'simple-printer', '~> 0.3'
+  gem.add_dependency 'tty-command', '~> 0.10'
   gem.add_dependency 'tty-progressbar', '~> 0.18'
   gem.add_dependency 'tty-screen', '~> 0.8'
 

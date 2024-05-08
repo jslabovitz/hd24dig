@@ -4,6 +4,7 @@ require 'set_params'
 require 'simple-command'
 require 'simple-dumper'
 require 'simple-printer'
+require 'tty-command'
 require 'tty-progressbar'
 require 'tty-screen'
 
