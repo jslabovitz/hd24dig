@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require 'hd24/test_utils'
+require_relative '../test/helpers'
 
-include HD24::TestUtils
+include HD24::TestHelpers
 
 output = open_midi_device(id: 9)
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-require 'hd24/test_utils'
+require_relative '../lib/hd24'
+require_relative '../lib/hd24/test_utils'
 
 include HD24::TestUtils
 

@@ -7,7 +7,7 @@ module HD24::Tests
     # DRIVE_IMAGE_FILE = Path.new('~/Projects/audio:video/studio/work/hd24-images/test.hd24').expand_path
     DRIVE_IMAGE_FILE = Path.new('/dev/disk4').expand_path
 
-    include HD24::TestUtils
+    include HD24::TestHelpers
 
     EXPECTED_SONGS = [
       {

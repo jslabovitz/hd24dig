@@ -4,7 +4,7 @@ module HD24::Tests
 
   class NotesTest < Minitest::Test
 
-    include HD24::TestUtils
+    include HD24::TestHelpers
 
     def test_notes
       file = TMP_DIR / 'note.wav'

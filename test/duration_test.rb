@@ -4,6 +4,8 @@ module HD24::Tests
 
   class DurationTest < Minitest::Test
 
+    include HD24::TestHelpers
+
     def test_params
       duration = HD24::Duration.new(minutes: 5)
       assert { duration.minutes == 5 }
