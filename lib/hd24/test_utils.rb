@@ -41,7 +41,7 @@ module HD24
         '--input', file,
         '--pitch-unit', 'midi',
       )
-# ;;pp out
+      warn "aubio errors: #{err}" unless err.empty?
       values = out.split(/\n/).map do |line|
         fields = line.split(/\s+/)
         if fields.length == 3
