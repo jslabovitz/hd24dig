@@ -7,7 +7,6 @@
   - send tone output to channel (track % 2)
 
 - Expand test harness & tests:
-  - test with connected drive (sudo chmod first)
   - multiple named projects
   - multiple songs
   - songs at various resolutions and number of tracks
