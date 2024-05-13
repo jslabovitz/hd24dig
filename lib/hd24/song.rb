@@ -88,6 +88,7 @@ module HD24
       file_allocation_info = read_record(Records::FileAllocationInfo, sector: @file_allocation_info_sector, count: 5)
       block_ranges = file_allocation_info.file_allocation_block_ranges
       num_blocks = block_ranges.map(&:count).sum
+      yield(Progress.new(song: self, phase: :extracting, total: num_blocks, advance: nil)) if block_given?
       sub_block_size = @project.drive.audio_block_size / @num_actual_tracks
       blocks_read = 0
       block_ranges.each do |block_range|
@@ -113,6 +114,7 @@ module HD24
     end
 
     def convert_pcm_files(pcm_files, dir:, extension:, &block)
+      yield(Progress.new(song: self, phase: :converting, total: @num_tracks, advance: nil)) if block_given?
       @num_tracks.times.map do |track|
         converted_file = path_for_track(track, dir:, extension:)
         cmd = ['sox']

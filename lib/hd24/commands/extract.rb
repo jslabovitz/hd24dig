@@ -16,14 +16,14 @@ module HD24
         raise UsageError, "Project(s) must be specified if song(s) are specified" if song_nums && !project_nums
         bar_label = "extracting: :name :phase [:bar] "
         bar_width = TTY::Screen.width - 91  # adjust as needed
-        bar = song = phase = nil
+        bar = nil
         drive.extract_audio(dir: output_dir, project_nums:, song_nums:) do |progress|
-          if progress.song != song || progress.phase != phase
+          if progress.advance
+            bar.advance(progress.advance, name: '%-64s' % song.full_name, phase: progress.phase.to_s)
+          else
             bar&.stop
             bar = TTY::ProgressBar.new(bar_label, total: progress.total, width: bar_width, clear: true)
-            song, phase = progress.song, progress.phase
           end
-          bar.advance(progress.advance, name: '%-64s' % song.full_name, phase: progress.phase.to_s)
         end
         bar&.stop
       end
