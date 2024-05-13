@@ -11,24 +11,21 @@ module HD24
         drive_path = args.shift or raise Simple::CommandParser::UsageError, "Must specify drive path"
         output_dir = Path.new(args.shift || '.')
         drive = HD24.open_drive(drive_path)
-        @projects = @projects.to_s.split(',')&.map(&:to_i) if @projects
-        @songs = @songs.to_s.split(',')&.map(&:to_i) if @songs
-        raise UsageError, "Project must be specified if songs are specified" if @songs && !@projects
-        bar_width = TTY::Screen.width - 91  # adjust for bar definition below
-        drive.projects.each do |project|
-          next if @projects && !@projects.include?(project.num)
-          project.songs.each do |song|
-            next if @songs && !@songs.include?(song.num)
-            dir = output_dir.join(drive.name, project.name, '%02d - %s' % [song.num, song.name])
-            dir.mkpath
-            bar = TTY::ProgressBar.new("extracting: :name :phase [:bar] ",
-              total: song.total_extraction_steps,
-              width: bar_width)
-            song.extract_audio(dir) do |phase|
-              bar.advance(name: '%-64s' % dir.relative_to(output_dir).to_s, phase: phase.to_s)
-            end
+        project_nums = @projects && @projects.to_s.split(',')&.map(&:to_i)
+        song_nums = @songs && @songs.to_s.split(',')&.map(&:to_i)
+        raise UsageError, "Project(s) must be specified if song(s) are specified" if song_nums && !project_nums
+        bar_label = "extracting: :name :phase [:bar] "
+        bar_width = TTY::Screen.width - 91  # adjust as needed
+        bar = song = phase = nil
+        drive.extract_audio(dir: output_dir, project_nums:, song_nums:) do |progress|
+          if progress.song != song || progress.phase != phase
+            bar&.stop
+            bar = TTY::ProgressBar.new(bar_label, total: progress.total, width: bar_width, clear: true)
+            song, phase = progress.song, progress.phase
           end
+          bar.advance(progress.advance, name: '%-64s' % song.full_name, phase: progress.phase.to_s)
         end
+        bar&.stop
       end
 
     end

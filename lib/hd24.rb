@@ -22,20 +22,20 @@ module HD24
 
 end
 
-require 'hd24/duration'
-require 'hd24/file_system'
+require_relative 'hd24/duration'
+require_relative 'hd24/file_system'
+require_relative 'hd24/progress'
 
-require 'hd24/part'
-require 'hd24/drive'
-require 'hd24/project'
-require 'hd24/song'
+require_relative 'hd24/part'
+require_relative 'hd24/drive'
+require_relative 'hd24/project'
+require_relative 'hd24/song'
 
-require 'hd24/records/drive_info'
-require 'hd24/records/file_allocation_info'
-require 'hd24/records/project_info'
-require 'hd24/records/song_info'
-require 'hd24/records/superblock'
+require_relative 'hd24/records/drive_info'
+require_relative 'hd24/records/file_allocation_info'
+require_relative 'hd24/records/project_info'
+require_relative 'hd24/records/song_info'
+require_relative 'hd24/records/superblock'
 
-require 'hd24/commands/clone'
-require 'hd24/commands/extract'
-require 'hd24/commands/info'
+require_relative 'hd24/commands/extract'
+require_relative 'hd24/commands/info'

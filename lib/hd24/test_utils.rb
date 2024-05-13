@@ -6,6 +6,7 @@
 
 require 'midi-mmc'
 require 'tty-command'
+require 'tty-prompt'
 require 'unimidi'
 
 module HD24

@@ -5,9 +5,102 @@ require_relative '../lib/hd24/test_utils'
 
 include HD24::TestUtils
 
-record_test_song(
-  midi_output_device_id: 9,
-  num_tracks: 8,
-  tone_duration: 2,
-  track_rate: 48000,
-  audio_device: ['coreaudio', 'Digiface USB (23801173)'])
+@midi_output_device_id = 9
+@audio_device = ['coreaudio', 'Digiface USB (23801173)']
+@tone_duration = 1
+
+=begin
+
+- multiple named projects
+- multiple songs
+- songs at various resolutions and number of tracks
+- songs with multiple blocks -- esp. after new song!
+  - add new tracks to existing song
+  - add new audio to existing song
+- move song to project
+- delete songs/projects
+- songs with all tracks full of content
+  - debug tracks that have empty audio after ~15s?
+
+=end
+
+@prompt = TTY::Prompt.new
+
+def step(desc, &block)
+  puts; puts "*** #{desc}"
+  yield
+end
+
+def instruct(device, *messages)
+  messages.each { |m| puts '%8s: %s' % [device, m] }
+  @prompt.ask('>')
+end
+
+def open_midi_interface
+  #FIXME
+end
+
+def record_song(num_tracks:, rate:)
+  record_test_song(
+    midi_output_device_id: @midi_output_device_id,
+    num_tracks: num_tracks,
+    tone_duration: @tone_duration,
+    track_rate: rate,
+    audio_device: @audio_device)
+  @plan
+end
+
+###
+
+@expected = []
+
+@drive_name = 'My Drive'
+@project_1_name = 'Project 1'
+@song_1_name = 'Song 1'
+
+step 'set up computer' do
+  instruct :computer, 'Connect to MIDI interface via USB'
+  # open_midi_interface
+end
+
+step 'set up HD24' do
+  instruct :hd24,
+    'Power on',
+    'Quick format HD',
+    'Hold down INPUT SELECT and press arm button for track 2',
+    'Set INPUT SELECT until INPUT reads either ANALOG or DIGITAL, as needed',
+    'Connect MIDI IN/OUT to MIDI interface channel #4 OUT/IN'
+end
+
+step 'format drive' do
+  instruct :hd24, 'Quick format HD'
+end
+
+step 'name drive' do
+  instruct :hd24, "Set name of drive to #{@drive_name}"
+  # @expected[name] = {}
+end
+
+step 'rename first project' do
+  instruct :hd24, "Set name of project to #{@project_1_name}"
+  # @expected[name] =
+end
+
+step 'create new song' do
+  instruct :hd24,
+    'Press NEW SONG',
+    'Set rate to 48 kHz',
+    'Set tracks to 2'
+  # record_song(num_tracks: 2, rate: 48000)
+  # @expected[@drive_name][@project_1_name] << {
+  #   name: @song_1_name,
+  #   num_tracks: 2,
+  # }
+end
+
+step 'finish' do
+  instruct :hd24, 'Press drive button to dismount drive'
+end
+
+;;pp @expected
+# JSON_FILE.print(JSON.pretty_generate(@results))

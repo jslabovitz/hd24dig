@@ -18,6 +18,7 @@ module HD24
     end
 
     def self.from_array(array)
+      raise ArgumentError if array.length > 4
       new(
         hours: array[0] || 0,
         minutes: array[1] || 0,
@@ -25,9 +26,17 @@ module HD24
         frames: array[3] || 0)
     end
 
+    def self.from_string(str)
+      from_array(str.split(':').map(&:to_i))
+    end
+
     def initialize(**)
       @hours = @minutes = @seconds = @frames = 0
       super
+    end
+
+    def ==(other)
+      to_array == other.to_array
     end
 
     def to_s

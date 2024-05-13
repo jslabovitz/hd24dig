@@ -20,9 +20,6 @@ rescue Simple::CommandParser::UsageError => error
 
     info DRIVE
       Show information about DRIVE.
-
-    clone DRIVE FILE
-      Clone DRIVE to FILE, only copying used sectors.
   END
   exit(1)
 end

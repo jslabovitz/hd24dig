@@ -18,6 +18,12 @@ module HD24::Tests
       assert { secs == 1.5 }
     end
 
+    def test_string
+      duration = HD24::Duration.from_string('00:00:07:12')
+      assert { duration.to_array == [0, 0, 7, 12] }
+      assert { duration.to_seconds.to_i == 7 }
+    end
+
     def test_seconds
       duration = HD24::Duration.from_seconds(1.5)
       assert { duration.to_array == [0, 0, 1, 15] }
