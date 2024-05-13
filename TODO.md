@@ -2,32 +2,25 @@
 
 ## Now
 
+- Rename to HD24Miner / hd24miner
+  - rename bin/hd24?
+
 - Make tester work with only two tracks
   - set up HD24 INPUT SELECT to channels 1 & 2
   - send tone output to channel (track % 2)
 
-- Expand test harness & tests:
-  - multiple named projects
-  - multiple songs
-  - songs at various resolutions and number of tracks
-  - songs with multiple blocks -- esp. after new song!
-    - add new tracks to existing song
-    - add new audio to existing song
-  - deleted songs/projects
-  - songs with all tracks full of content
-    - debug tracks that have empty audio after ~15s?
+- Check actual audio file duration against expected/reported duration.
 
-- Clone doesn't seem to be copying enough sectors:
-  - ending up with short extracted files
-  - add sector-tracing to FileSystem, then compare with cloned sectors
-  - or disable for now?
+- Expand test harness & tests
 
-- Test on old Air.
+- Rebuild clone
+  - add sector-tracing to FileSystem and do cloning during full extract
 
-- Write basic README.
-  - Describe access to raw drive, via /dev/diskN.
-    - Run as sudo (will drop access after opening file).
-  - Difficulty in referring to project/song names/numbers.
+- Test on old Air
+
+- Finish README
+
+- Add license
 
 
 ## Soon
