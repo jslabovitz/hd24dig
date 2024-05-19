@@ -3,17 +3,7 @@
 ## Now
 
 - Remove local gem references from Gemfile.
-- Expand test harness & tests.
-  - multiple named projects
-  - multiple songs
-  - songs at various resolutions and number of tracks
-  - songs with multiple blocks -- esp. after new song!
-    - add new tracks to existing song
-    - add new audio to existing song
-  - move song to project
-  - delete songs/projects
-  - songs with all tracks full of content
-    - debug tracks that have empty audio after ~15s?
+  - push/publish midi-mmc, pitch, tone-gen
 - Test on old Air.
 - Finish README.
 - Add license.
@@ -28,6 +18,17 @@
 
 ## Later
 
+- Expand test harness & tests.
+  - multiple named projects
+  - multiple songs
+  - songs at various resolutions and number of tracks
+  - songs with multiple blocks -- esp. after new song!
+    - add new tracks to existing song
+    - add new audio to existing song
+  - move song to project
+  - delete songs/projects
+  - songs with all tracks full of content
+    - debug tracks that have empty audio after ~15s?
 - Rebuild `clone` command.
   - add sector-tracing to FileSystem and do cloning during full extract
 - Document classes.
