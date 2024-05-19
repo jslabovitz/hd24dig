@@ -7,7 +7,7 @@ require 'tty-table'
 require 'tty-progressbar'
 require 'tty-screen'
 
-module HD24
+module HD24Dig
 
   class UnexpectedData < StandardError; end
 
@@ -47,20 +47,20 @@ module HD24
 
 end
 
-require_relative 'hd24/duration'
-require_relative 'hd24/file_system'
-require_relative 'hd24/progress'
+require_relative 'hd24dig/duration'
+require_relative 'hd24dig/file_system'
+require_relative 'hd24dig/progress'
 
-require_relative 'hd24/part'
-require_relative 'hd24/drive'
-require_relative 'hd24/project'
-require_relative 'hd24/song'
+require_relative 'hd24dig/part'
+require_relative 'hd24dig/drive'
+require_relative 'hd24dig/project'
+require_relative 'hd24dig/song'
 
-require_relative 'hd24/records/drive_info'
-require_relative 'hd24/records/file_allocation_info'
-require_relative 'hd24/records/project_info'
-require_relative 'hd24/records/song_info'
-require_relative 'hd24/records/superblock'
+require_relative 'hd24dig/records/drive_info'
+require_relative 'hd24dig/records/file_allocation_info'
+require_relative 'hd24dig/records/project_info'
+require_relative 'hd24dig/records/song_info'
+require_relative 'hd24dig/records/superblock'
 
-require_relative 'hd24/commands/extract'
-require_relative 'hd24/commands/info'
+require_relative 'hd24dig/commands/extract'
+require_relative 'hd24dig/commands/info'

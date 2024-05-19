@@ -1,4 +1,4 @@
-module HD24
+module HD24Dig
 
   class Song < Part
 
@@ -139,7 +139,7 @@ module HD24
           '--channels', 1,
         ]
         cmd << converted_file
-        HD24.run_command(cmd)
+        HD24Dig.run_command(cmd)
         yield(Progress.new(song: self, phase: :converting, total: @num_tracks, advance: 1)) if block_given?
         converted_file
       end

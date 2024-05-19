@@ -1,4 +1,4 @@
-module HD24
+module HD24Dig
 
   class Duration
 
@@ -31,7 +31,7 @@ module HD24
     end
 
     def self.from_file(file)
-      out, _ = HD24.run_command('soxi', '-D', file)
+      out, _ = HD24Dig.run_command('soxi', '-D', file)
       from_seconds(out.to_f)
     end
 

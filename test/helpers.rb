@@ -3,9 +3,9 @@ $VERBOSE = false
 require 'minitest/autorun'
 require 'minitest/power_assert'
 
-require_relative '../lib/hd24'
+require_relative '../lib/hd24dig'
 
-module HD24
+module HD24Dig
 
   module TestHelpers
 

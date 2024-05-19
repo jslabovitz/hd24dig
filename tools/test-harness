@@ -4,7 +4,7 @@ require 'midi-mmc'
 require 'tone-gen'
 require 'unimidi'
 
-require_relative '../lib/hd24'
+require_relative '../lib/hd24dig'
 
 ###
 
@@ -59,7 +59,7 @@ def record_song(num_tracks:, rate:)
     mmc.goto_zero
     mmc.write(num_tracks.times.to_a)
     mmc.record_strobe
-    HD24.run_command(sox_command)
+    HD24Dig.run_command(sox_command)
   ensure
     mmc.stop
     mmc.goto_zero

@@ -2,7 +2,6 @@
 
 ## Now
 
-- Rename to HD24Dig / hd24dig.
 - Remove local gem references from Gemfile.
 - Expand test harness & tests.
   - multiple named projects

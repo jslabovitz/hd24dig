@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'hd24'
+require 'hd24dig'
 
 begin
   Simple::CommandParser.run(ARGV)

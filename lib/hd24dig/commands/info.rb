@@ -1,4 +1,4 @@
-module HD24
+module HD24Dig
 
   module Commands
 
@@ -6,7 +6,7 @@ module HD24
 
       def run(args)
         drive_path = args.shift or raise Simple::CommandParser::UsageError, "Must specify drive path"
-        drive = HD24.open_drive(drive_path)
+        drive = HD24Dig.open_drive(drive_path)
         drive.print_info
       end
 

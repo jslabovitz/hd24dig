@@ -2,15 +2,15 @@ require 'tone-gen'
 
 require_relative 'helpers'
 
-module HD24::Tests
+module HD24Dig::Tests
 
   class DriveTest < Minitest::Test
 
-    include HD24::TestHelpers
+    include HD24Dig::TestHelpers
 
     def setup
       @expected_drive = eval(TEST_SETUP_FILE.read)
-      @drive = HD24.open_drive(DRIVE_IMAGE_FILE)
+      @drive = HD24Dig.open_drive(DRIVE_IMAGE_FILE)
     end
 
     def test_load
@@ -27,7 +27,7 @@ module HD24::Tests
           expected_duration = song.duration.to_seconds.to_i
           tone_gen = ToneGen.new
           files.each_with_index do |file, i|
-            duration = HD24::Duration.from_file(file).to_seconds.to_i
+            duration = HD24Dig::Duration.from_file(file).to_seconds.to_i
             assert { duration == expected_duration }
             expected_pitch = tone_gen.make_pitch(index: i)
             pitch = tone_gen.pitch_for_file(file)

@@ -1,4 +1,4 @@
-module HD24
+module HD24Dig
 
   Progress = Data.define(
     :song,
