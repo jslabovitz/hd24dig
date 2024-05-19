@@ -139,8 +139,7 @@ module HD24
           '--channels', 1,
         ]
         cmd << converted_file
-        command = TTY::Command.new(printer: :null)
-        command.run(*cmd.flatten.compact.map(&:to_s))
+        HD24.run_command(cmd)
         yield(Progress.new(song: self, phase: :converting, total: @num_tracks, advance: 1)) if block_given?
         converted_file
       end
