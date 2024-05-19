@@ -2,9 +2,7 @@
 
 ## Now
 
-- Rename to HD24Miner / hd24miner.
-  - rename bin/hd24?
-- Check actual audio file duration against expected/reported duration.
+- Rename to HD24Dig / hd24dig.
 - Remove local gem references from Gemfile.
 - Expand test harness & tests.
   - multiple named projects
