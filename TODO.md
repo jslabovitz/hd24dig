@@ -2,25 +2,24 @@
 
 ## Now
 
-- Rename to HD24Miner / hd24miner
+- Rename to HD24Miner / hd24miner.
   - rename bin/hd24?
-
-- Make tester work with only two tracks
-  - set up HD24 INPUT SELECT to channels 1 & 2
-  - send tone output to channel (track % 2)
-
 - Check actual audio file duration against expected/reported duration.
-
-- Expand test harness & tests
-
-- Rebuild clone
-  - add sector-tracing to FileSystem and do cloning during full extract
-
-- Test on old Air
-
-- Finish README
-
-- Add license
+- Remove local gem references from Gemfile.
+- Expand test harness & tests.
+  - multiple named projects
+  - multiple songs
+  - songs at various resolutions and number of tracks
+  - songs with multiple blocks -- esp. after new song!
+    - add new tracks to existing song
+    - add new audio to existing song
+  - move song to project
+  - delete songs/projects
+  - songs with all tracks full of content
+    - debug tracks that have empty audio after ~15s?
+- Test on old Air.
+- Finish README.
+- Add license.
 
 
 ## Soon
@@ -32,6 +31,8 @@
 
 ## Later
 
+- Rebuild `clone` command.
+  - add sector-tracing to FileSystem and do cloning during full extract
 - Document classes.
 - Allow specific tracks to be extracted.
 - Allow songs/tracks to be extracted without creating directory hierary.
