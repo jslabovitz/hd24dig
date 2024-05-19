@@ -6,9 +6,16 @@ HD24::Drive.new(
       songs: [
         HD24::Song.new(
           name: 'Song Name',
-          duration: '00:00:07:12',
-          num_tracks: 8,
+          duration: '00:00:05:00',
+          num_tracks: 24,
           sample_rate: 48000,
+          sample_depth: 24,
+        ),
+        HD24::Song.new(
+          name: 'Song Name',
+          duration: '00:00:05:00',
+          num_tracks: 24,
+          sample_rate: 96000,
           sample_depth: 24,
         ),
       ],
