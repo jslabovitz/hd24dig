@@ -83,11 +83,8 @@ step 'set up HD24' do
     'Power on',
     'Hold down INPUT SELECT and press arm button for track 24',
     'Set INPUT SELECT until INPUT reads either ANALOG or DIGITAL, as needed',
-    'Connect MIDI IN/OUT to MIDI interface channel #4 OUT/IN'
-end
-
-step 'format drive' do
-  instruct :hd24, 'Quick format HD'
+    'Connect MIDI IN/OUT to MIDI interface channel #4 OUT/IN',
+    'Quick format HD'
 end
 
 @drive.projects.each do |project|
