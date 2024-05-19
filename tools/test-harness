@@ -1,30 +1,20 @@
 #!/usr/bin/env ruby
 
+require 'midi-mmc'
+require 'tone-gen'
+require 'unimidi'
+
 require_relative '../lib/hd24'
-require_relative '../lib/hd24/test_utils'
 
-include HD24::TestUtils
+###
 
-@midi_output_device_id = 9
-@audio_device = ['coreaudio', 'Digiface USB (23801173)']
-@tone_duration = 1
+MIDI_OUTPUT_DEVICE_ID = 9
+OUTPUT_SPEC = ['--type', 'coreaudio', 'Digiface USB (23801173)']
+# OUTPUT_SPEC = ['--type', 'coreaudio']
+TEST_SETUP_FILE = Path.new('test/test_setup.rb')
+OUTPUT_DIR = Path.new('/tmp/test-harness')
 
-=begin
-
-- multiple named projects
-- multiple songs
-- songs at various resolutions and number of tracks
-- songs with multiple blocks -- esp. after new song!
-  - add new tracks to existing song
-  - add new audio to existing song
-- move song to project
-- delete songs/projects
-- songs with all tracks full of content
-  - debug tracks that have empty audio after ~15s?
-
-=end
-
-@prompt = TTY::Prompt.new
+###
 
 def step(desc, &block)
   puts; puts "*** #{desc}"
@@ -32,42 +22,66 @@ def step(desc, &block)
 end
 
 def instruct(device, *messages)
-  messages.each { |m| puts '%8s: %s' % [device, m] }
-  @prompt.ask('>')
+  messages.each do |msg|
+    print '> %8s: %-80s ' % [device, msg]
+    gets
+  end
 end
 
 def open_midi_interface
-  #FIXME
+  @midi_output = UniMIDI::Output.all.find { |o| o.id == MIDI_OUTPUT_DEVICE_ID }
+  unless @midi_output
+    warn "Can't find MIDI output device -- mocking instead"
+    @midi_output = nil
+  end
 end
 
 def record_song(num_tracks:, rate:)
-  record_test_song(
-    midi_output_device_id: @midi_output_device_id,
-    num_tracks: num_tracks,
-    tone_duration: @tone_duration,
-    track_rate: rate,
-    audio_device: @audio_device)
-  @plan
+  OUTPUT_DIR.rmtree if OUTPUT_DIR.exist?
+  OUTPUT_DIR.mkpath
+  tone_gen = ToneGen.new(duration: 5, rate:)
+  pitch_files = num_tracks.times.map do |track|
+    tone_gen.make_pitch_file(
+      pitch: tone_gen.make_pitch(index: track),
+      file: (OUTPUT_DIR / track).add_extension('.wav'),
+    )
+  end
+  sox_command = [
+    'sox',
+    '--combine', 'merge',
+    pitch_files,
+    OUTPUT_SPEC,
+    'gain', -6,
+  ]
+  mmc = MIDI::MMC.new(output: @midi_output, debug: true)
+  mmc.reset
+  begin
+    mmc.goto_zero
+    mmc.write(num_tracks.times.to_a)
+    mmc.record_strobe
+    HD24.run_command(sox_command)
+  ensure
+    mmc.stop
+    mmc.goto_zero
+    mmc.write(nil)
+    mmc.reset
+  end
+  pitch_files.each(&:unlink)
 end
 
 ###
 
-@expected = []
-
-@drive_name = 'My Drive'
-@project_1_name = 'Project 1'
-@song_1_name = 'Song 1'
+@drive = eval(TEST_SETUP_FILE.read)
 
 step 'set up computer' do
   instruct :computer, 'Connect to MIDI interface via USB'
-  # open_midi_interface
+  open_midi_interface
 end
 
 step 'set up HD24' do
   instruct :hd24,
     'Power on',
-    'Quick format HD',
-    'Hold down INPUT SELECT and press arm button for track 2',
+    'Hold down INPUT SELECT and press arm button for track 24',
     'Set INPUT SELECT until INPUT reads either ANALOG or DIGITAL, as needed',
     'Connect MIDI IN/OUT to MIDI interface channel #4 OUT/IN'
 end
@@ -76,31 +90,18 @@ step 'format drive' do
   instruct :hd24, 'Quick format HD'
 end
 
-step 'name drive' do
-  instruct :hd24, "Set name of drive to #{@drive_name}"
-  # @expected[name] = {}
-end
-
-step 'rename first project' do
-  instruct :hd24, "Set name of project to #{@project_1_name}"
-  # @expected[name] =
-end
-
-step 'create new song' do
-  instruct :hd24,
-    'Press NEW SONG',
-    'Set rate to 48 kHz',
-    'Set tracks to 2'
-  # record_song(num_tracks: 2, rate: 48000)
-  # @expected[@drive_name][@project_1_name] << {
-  #   name: @song_1_name,
-  #   num_tracks: 2,
-  # }
+@drive.projects.each do |project|
+  project.songs.each do |song|
+    step "create new song @ #{song.sample_rate}" do
+      instruct :hd24,
+        'Press NEW SONG',
+        "Set rate to #{song.sample_rate} kHz",
+        "Set tracks to #{song.num_tracks}"
+      record_song(num_tracks: song.num_tracks, rate: song.sample_rate)
+    end
+  end
 end
 
 step 'finish' do
   instruct :hd24, 'Press drive button to dismount drive'
 end
-
-;;pp @expected
-# JSON_FILE.print(JSON.pretty_generate(@results))
