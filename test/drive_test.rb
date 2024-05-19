@@ -24,8 +24,11 @@ module HD24::Tests
         project.songs.each do |song|
           files = song.extract_audio(dir: TMP_DIR)
           assert { files.length == song.num_tracks }
+          expected_duration = song.duration.to_seconds.to_i
           tone_gen = ToneGen.new
           files.each_with_index do |file, i|
+            duration = HD24::Duration.from_file(file).to_seconds.to_i
+            assert { duration == expected_duration }
             expected_pitch = tone_gen.make_pitch(index: i)
             pitch = tone_gen.pitch_for_file(file)
             assert { pitch == expected_pitch }

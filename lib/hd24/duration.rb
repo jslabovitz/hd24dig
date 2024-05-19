@@ -30,6 +30,11 @@ module HD24
       from_array(str.split(':').map(&:to_i))
     end
 
+    def self.from_file(file)
+      out, _ = HD24.run_command('soxi', '-D', file)
+      from_seconds(out.to_f)
+    end
+
     def initialize(**)
       @hours = @minutes = @seconds = @frames = 0
       super
