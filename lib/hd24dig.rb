@@ -4,7 +4,6 @@ require 'set_params'
 require 'simple-command-parser'
 require 'tty-command'
 require 'tty-table'
-require 'tty-progressbar'
 require 'tty-screen'
 
 module HD24Dig
