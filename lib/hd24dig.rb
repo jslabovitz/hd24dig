@@ -49,7 +49,6 @@ end
 
 require_relative 'hd24dig/duration'
 require_relative 'hd24dig/file_system'
-require_relative 'hd24dig/progress'
 
 require_relative 'hd24dig/part'
 require_relative 'hd24dig/drive'

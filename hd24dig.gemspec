@@ -17,7 +17,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'set_params', '~> 0.2'
   gem.add_dependency 'simple-command-parser', '~> 1.0'
   gem.add_dependency 'tty-command', '~> 0.10'
-  gem.add_dependency 'tty-progressbar', '~> 0.18'
   gem.add_dependency 'tty-screen', '~> 0.8'
   gem.add_dependency 'tty-table', '~> 0.12'
 
