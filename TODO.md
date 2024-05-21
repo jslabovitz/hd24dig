@@ -29,8 +29,6 @@
   - delete songs/projects
   - songs with all tracks full of content
     - debug tracks that have empty audio after ~15s?
-- Rebuild `clone` command.
-  - add sector-tracing to FileSystem and do cloning during full extract
 - Document classes.
 - Allow specific tracks to be extracted.
 - Allow songs/tracks to be extracted without creating directory hierary.

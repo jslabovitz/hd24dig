@@ -6,8 +6,8 @@ module HD24Dig
     attr_accessor :projects
     attr_accessor :audio_block_size
 
-    def self.open(path)
-      fs = FileSystem.open(path.to_s, 'rb')
+    def self.open(path, clone: nil)
+      fs = FileSystem.new(file: path, clone:)
       read(fs:, sector: 0)
     end
 
@@ -66,6 +66,15 @@ module HD24Dig
               song.extract_audio(dir:, &block)
             end
           end
+        end
+      end
+    end
+
+    def clone
+      @projects.each do |project|
+        project.songs.each do |song|
+          null_ios = [nil] * song.num_tracks
+          song.extract_tracks(null_ios)
         end
       end
     end
