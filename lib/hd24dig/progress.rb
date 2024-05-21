@@ -1,7 +1,7 @@
 module HD24Dig
 
   Progress = Data.define(
-    :song,
+    :name,
     :phase,
     :total,
     :advance,

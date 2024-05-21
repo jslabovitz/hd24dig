@@ -88,7 +88,7 @@ module HD24Dig
       file_allocation_info = read_record(Records::FileAllocationInfo, sector: @file_allocation_info_sector, count: 5)
       block_ranges = file_allocation_info.file_allocation_block_ranges
       num_blocks = block_ranges.map(&:count).sum
-      yield(Progress.new(song: self, phase: :extracting, total: num_blocks, advance: nil)) if block_given?
+      yield(Progress.new(name: full_name, phase: :extracting, total: num_blocks, advance: nil)) if block_given?
       sub_block_size = @project.drive.audio_block_size / @num_actual_tracks
       blocks_read = 0
       block_ranges.each do |block_range|
@@ -98,7 +98,7 @@ module HD24Dig
             data = fs.read_sectors(sub_block_size)
             track_io.write(data) if track_io
           end
-          yield(Progress.new(song: self, phase: :extracting, total: num_blocks, advance: 1)) if block_given?
+          yield(Progress.new(name: full_name, phase: :extracting, total: num_blocks, advance: 1)) if block_given?
         end
       end
     end
@@ -114,7 +114,7 @@ module HD24Dig
     end
 
     def convert_pcm_files(pcm_files, dir:, extension:, &block)
-      yield(Progress.new(song: self, phase: :converting, total: @num_tracks, advance: nil)) if block_given?
+      yield(Progress.new(name: full_name, phase: :converting, total: @num_tracks, advance: nil)) if block_given?
       @num_tracks.times.map do |track|
         converted_file = path_for_track(track, dir:, extension:)
         cmd = ['sox']
@@ -140,7 +140,7 @@ module HD24Dig
         ]
         cmd << converted_file
         HD24Dig.run_command(cmd)
-        yield(Progress.new(song: self, phase: :converting, total: @num_tracks, advance: 1)) if block_given?
+        yield(Progress.new(name: full_name, phase: :converting, total: @num_tracks, advance: 1)) if block_given?
         converted_file
       end
     end
