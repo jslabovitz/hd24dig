@@ -56,6 +56,7 @@ require_relative 'hd24dig/song'
 
 require_relative 'hd24dig/records/drive_info'
 require_relative 'hd24dig/records/file_allocation_info'
+require_relative 'hd24dig/records/locate_point_entry'
 require_relative 'hd24dig/records/project_info'
 require_relative 'hd24dig/records/song_info'
 require_relative 'hd24dig/records/superblock'

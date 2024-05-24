@@ -41,6 +41,7 @@ module HD24Dig
       #                 [0x00, 0xbb, 0x80] / [0, 187, 128] -> 48000 Samples/sec
       #                 [0x01, 0x58, 0x88] / [1,  88, 136] -> 88200 Samoles/sec
       #                 [0x01, 0x77, 0x00] / [1, 119,   0] -> 96000 Samples/sec
+      # 0x37 +1    Bit depth (18h or 24 by default)
 
       # from Claude Opus:
       #
@@ -56,10 +57,6 @@ module HD24Dig
 
       skip to_abs_offset: 0x34
       array :sample_info, type: :uint8, initial_length: 4
-
-      # # 0x37 +1    Bit depth (18h or 24 by default)
-      # skip to_abs_offset: 0x37
-      # uint8 :bit_depth
 
       virtual :sample_rate, value: -> {
         a0, a1, a2 = sample_info[0..2]
@@ -79,10 +76,11 @@ module HD24Dig
 
       # 0x58 +96    Track slip info for track 1-24
       skip to_abs_offset: 0x58
-      skip length: 96
+      array :track_slip_info, type: :uint32, initial_length: 24
 
       # 0xb8 +300  Locate point block
-      skip length: 300
+      skip to_abs_offset: 0xb8
+      array :locate_point_entries, type: :locate_point_entry, initial_length: 24
 
       # 0x3b8 +64  Full song name, max 64 bytes; terminated by null byte when less than 64 bytes
       skip to_abs_offset: 0x3b8
