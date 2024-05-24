@@ -1,8 +1,0 @@
-#!/bin/sh
-
-sudo dd \
-  if=/dev/disk4 \
-  of=/tmp/hd24.img \
-  bs=1m \
-  conv=sparse \
-  status=progress
