@@ -2,9 +2,12 @@ module HD24Dig
 
   class Project < Part
 
-    attr_accessor :name
-    attr_accessor :num
-    attr_accessor :songs
+    ATTRS = %i[
+      name
+      num
+      songs
+    ]
+    attr_accessor *ATTRS
     attr_accessor :drive
 
     def songs=(songs)
@@ -13,13 +16,6 @@ module HD24Dig
         s.project = self
         s
       end
-    end
-
-    def ==(other)
-      !other.nil? &&
-        @num == other.num &&
-        @name == other.name &&
-        @songs == other.songs
     end
 
     def read(sector)

@@ -10,6 +10,18 @@ module HD24Dig
       new(**params).tap { |p| p.send(:read, sector) }
     end
 
+    def inspect
+      to_h.inspect
+    end
+
+    def to_h
+      self.class.const_get(:ATTRS).map { |k| [k, send(k)] }.to_h
+    end
+
+    def ==(other)
+      to_h == other&.to_h
+    end
+
     private
 
     def read(sector)

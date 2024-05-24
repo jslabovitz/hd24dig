@@ -2,12 +2,16 @@ module HD24Dig
 
   class Song < Part
 
-    attr_accessor :num
-    attr_accessor :name
-    attr_accessor :sample_rate
-    attr_accessor :sample_depth
-    attr_accessor :duration
-    attr_accessor :num_tracks
+    ATTRS = %i[
+      num
+      name
+      sample_rate
+      sample_depth
+      duration
+      num_tracks
+    ]
+    attr_accessor *ATTRS
+
     attr_accessor :num_blocks
     attr_accessor :project
 
@@ -22,16 +26,6 @@ module HD24Dig
       else
         raise ArgumentError
       end
-    end
-
-    def ==(other)
-      !other.nil? &&
-        @num == other.num &&
-        @name == other.name &&
-        @sample_rate == other.sample_rate &&
-        @sample_depth == other.sample_depth &&
-        @duration == other.duration &&
-        @num_tracks == other.num_tracks
     end
 
     def full_name_elements

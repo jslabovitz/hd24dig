@@ -2,8 +2,12 @@ module HD24Dig
 
   class Drive < Part
 
-    attr_accessor :name
-    attr_accessor :projects
+    ATTRS = %i[
+      name
+      projects
+    ]
+    attr_accessor *ATTRS
+
     attr_accessor :audio_block_size
 
     def self.open(path, clone: nil)
@@ -17,12 +21,6 @@ module HD24Dig
         p.drive = self
         p
       end
-    end
-
-    def ==(other)
-      !other.nil? &&
-        @name == other.name &&
-        @projects == other.projects
     end
 
     INFO_HEADER = {
