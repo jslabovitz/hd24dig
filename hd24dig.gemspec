@@ -26,7 +26,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'minitest-power_assert', '~> 0.3'
   gem.add_development_dependency 'tone-gen', '~> 0.1'
   gem.add_development_dependency 'rake', '~> 13.2'
-  gem.add_development_dependency 'tty-prompt', '~> 0.23'
   gem.add_development_dependency 'unimidi', '~> 0.5'
 
 end
