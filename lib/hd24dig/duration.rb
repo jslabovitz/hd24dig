@@ -40,8 +40,10 @@ module HD24Dig
       super
     end
 
+    # NOTE: this is an approximate equality, as it drops the frames and # converts to an integer.
+
     def ==(other)
-      to_array == other.to_array
+      to_seconds.to_i == other.to_seconds.to_i
     end
 
     def to_s
