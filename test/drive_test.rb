@@ -29,8 +29,8 @@ module HD24Dig::Tests
           files.each_with_index do |file, i|
             duration = HD24Dig::Duration.from_file(file).to_seconds.to_i
             assert { duration == expected_duration }
-            expected_pitch = tone_gen.make_pitch(index: i)
             pitch = tone_gen.pitch_for_file(file)
+            expected_pitch = tone_gen.make_pitch(index: i)
             assert { pitch == expected_pitch }
           end
         end
