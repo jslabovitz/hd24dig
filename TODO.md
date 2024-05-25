@@ -2,9 +2,10 @@
 
 ## Now
 
+- Do full test, with hi-res.
 - Remove local gem references from Gemfile.
   - push/publish midi-mmc, pitch, tone-gen
-- Test on old Air.
+- Rename 'clone' to 'copy'?
 - Finish README.
 - Add license.
 
