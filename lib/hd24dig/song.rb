@@ -138,7 +138,6 @@ module HD24Dig
 
     def read(sector)
       song_info = read_record(Records::SongInfo, sector:, count: 2)
-;;pp(song_info:)
       @name = song_info.song_name
       @sample_rate = song_info.sample_rate
       @sample_depth = song_info.sample_depth
