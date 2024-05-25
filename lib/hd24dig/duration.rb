@@ -46,6 +46,14 @@ module HD24Dig
       to_seconds.to_i == other.to_seconds.to_i
     end
 
+    def +(other)
+      self.class.from_seconds(to_seconds + other.to_seconds)
+    end
+
+    def -(other)
+      self.class.from_seconds(to_seconds - other.to_seconds)
+    end
+
     def to_s
       '%02d:%02d:%02d:%02d' % [
         @hours,
