@@ -4,6 +4,11 @@ HD24Dig::Drive.new(
     HD24Dig::Project.new(
       name: 'Proj Name',
       songs: [
+
+        #
+        # 48 kHz
+        #
+
         HD24Dig::Song.new(
           name: 'Song Name',
           duration: '00:00:05:12',
@@ -39,13 +44,40 @@ HD24Dig::Drive.new(
           sample_rate: 48000,
           sample_depth: 24,
         ),
-        # HD24Dig::Song.new(
-        #   name: 'Song Name',
-        #   duration: '00:00:05:00',
-        #   num_tracks: 12,
-        #   sample_rate: 96000,
-        #   sample_depth: 24,
-        # ),
+
+        #
+        # 96 kHz
+        #
+
+        HD24Dig::Song.new(
+          name: 'Song Name',
+          duration: '00:00:05:00',
+          num_tracks: 2,
+          sample_rate: 96000,
+          sample_depth: 24,
+        ),
+        HD24Dig::Song.new(
+          name: 'Song Name',
+          duration: '00:00:05:00',
+          num_tracks: 6,
+          sample_rate: 96000,
+          sample_depth: 24,
+        ),
+        HD24Dig::Song.new(
+          name: 'Song Name',
+          duration: '00:00:05:00',
+          num_tracks: 8,
+          sample_rate: 96000,
+          sample_depth: 24,
+        ),
+        HD24Dig::Song.new(
+          name: 'Song Name',
+          duration: '00:00:05:00',
+          num_tracks: 12,
+          sample_rate: 96000,
+          sample_depth: 24,
+        ),
+
       ],
     )
   ],
