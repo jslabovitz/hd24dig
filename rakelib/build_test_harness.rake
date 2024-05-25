@@ -15,13 +15,9 @@ task :build_test_harness do
   @drive.projects.each do |project|
     project.songs.each do |song|
       puts
-      puts <<~END
-        On HD24:
-          - press NEW SONG
-          - set rate to #{song.sample_rate} kHz
-          - set number of tracks to #{song.num_tracks}
-      END
-      print "Ready? "; STDIN.gets
+      puts "On HD24, create new song with rate = #{song.sample_rate} kHz, tracks = #{song.num_tracks}"
+      print "Create? "
+      next if STDIN.gets.chomp != 'y'
       test_song = TestSong.new(
         num_tracks: song.num_tracks,
         duration: song.duration.to_seconds,
