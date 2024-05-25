@@ -12,14 +12,14 @@ module HD24Dig
       # 0x04 +4    ?0
       uint32
 
-      # 0x08 +4    1/512th of the number of samples per interlace block before the audio switches to the next track.
-      uint32 :samples_per_block_512
+      # 0x08 +4    1/512th of the number of samples per interlace [sub] block before the audio switches to the next track.
+      uint32 :num_samples_per_sub_block_512
 
-      # 0x0c +4    number of sectors per interlace block before the audio switches to the next track.
-      uint32 :num_sectors_per_block
+      # 0x0c +4    number of sectors per [sub] interlace block before the audio switches to the next track.
+      uint32 :num_sectors_per_sub_block
 
       # 0x10 +4    The value stored at offset 08, times 512 (0x200).
-      uint32 :samples_per_block
+      uint32 :num_samples_per_sub_block
 
       # 0x28 +8    First 8 bytes of song name. (obsolete)
       # skip to_abs_offset: 0x28

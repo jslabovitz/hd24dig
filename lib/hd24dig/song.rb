@@ -12,7 +12,6 @@ module HD24Dig
     ]
     attr_accessor *ATTRS
 
-    attr_accessor :num_blocks
     attr_accessor :project
 
     def duration=(duration)
@@ -80,13 +79,17 @@ module HD24Dig
     end
 
     def extract_tracks(track_ios)
+      samples_to_read = @num_samples
       @block_ranges.each do |block_range|
         fs.seek_sector(block_range.begin)
-        block_range.count.times do |block_num|
+        block_range.count.times do
+          sub_block_samples = [samples_to_read, @num_samples_per_sub_block].min
+          sub_block_bytes = sub_block_samples * 3
           track_ios.each do |track_io|
-            data = fs.read_sectors(@sub_block_size)
-            track_io.write(data) if track_io
+            data = fs.read_sectors(@num_sectors_per_sub_block)
+            track_io.write(data[0, sub_block_bytes]) if track_io
           end
+          samples_to_read -= sub_block_samples
         end
       end
     end
@@ -111,18 +114,18 @@ module HD24Dig
           ]
           pcm_files[track, 2].each do |pcm_file|
             cmd += [
-              sox_input_arguments(rate: sample_rate / 2),
+              sox_input_arguments(rate: @sample_rate / 2),
               pcm_file,
             ]
           end
         else
           cmd += [
-            sox_input_arguments(rate: sample_rate),
+            sox_input_arguments(rate: @sample_rate),
             pcm_files[track],
           ]
         end
         cmd += [
-          '--rate', sample_rate,
+          '--rate', @sample_rate,
           '--channels', 1,
         ]
         cmd << converted_file
@@ -135,18 +138,20 @@ module HD24Dig
 
     def read(sector)
       song_info = read_record(Records::SongInfo, sector:, count: 2)
+;;pp(song_info:)
       @name = song_info.song_name
       @sample_rate = song_info.sample_rate
       @sample_depth = song_info.sample_depth
-      secs = song_info.num_samples.to_f / @sample_rate
+      @num_samples = song_info.num_samples
+      secs = @num_samples.to_f / @sample_rate
       secs *= 2 if high_resolution?
       @duration = Duration.from_seconds(secs)
       @num_actual_tracks = song_info.num_tracks
       @num_tracks = high_resolution? ? (@num_actual_tracks / 2) : @num_actual_tracks
       file_allocation_info = read_record(Records::FileAllocationInfo, sector: sector + 2, count: 5)
       @block_ranges = file_allocation_info.file_allocation_block_ranges
-      @num_blocks = @block_ranges.map(&:count).sum
-      @sub_block_size = @project.drive.audio_block_size / @num_actual_tracks
+      @num_sectors_per_sub_block = song_info.num_sectors_per_sub_block
+      @num_samples_per_sub_block = song_info.num_samples_per_sub_block
     end
 
   end

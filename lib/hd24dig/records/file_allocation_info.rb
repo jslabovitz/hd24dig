@@ -23,7 +23,7 @@ module HD24Dig
       virtual :file_allocation_block_ranges, value: -> {
         file_allocation_blocks.
           reject { |info| info.num_blocks == 0 }.
-          map { |info| info.starting_sector ... (info.starting_sector + info.num_blocks) }
+          map { |info| info.starting_sector .. (info.starting_sector + info.num_blocks - 1) }
       }
     end
 
