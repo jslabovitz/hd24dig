@@ -51,28 +51,28 @@ HD24Dig::Drive.new(
 
         HD24Dig::Song.new(
           name: 'Song Name',
-          duration: '00:00:05:00',
+          duration: '00:00:05:05',
           num_tracks: 2,
           sample_rate: 96000,
           sample_depth: 24,
         ),
         HD24Dig::Song.new(
           name: 'Song Name',
-          duration: '00:00:05:00',
+          duration: '00:00:05:07',
           num_tracks: 6,
           sample_rate: 96000,
           sample_depth: 24,
         ),
         HD24Dig::Song.new(
           name: 'Song Name',
-          duration: '00:00:05:00',
+          duration: '00:00:05:07',
           num_tracks: 8,
           sample_rate: 96000,
           sample_depth: 24,
         ),
         HD24Dig::Song.new(
           name: 'Song Name',
-          duration: '00:00:05:00',
+          duration: '00:00:05:07',
           num_tracks: 12,
           sample_rate: 96000,
           sample_depth: 24,
