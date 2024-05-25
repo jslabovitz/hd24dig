@@ -20,7 +20,7 @@ module HD24Dig
       array :song_info_table, type: :uint32, initial_length: 99
 
       virtual :song_info_sectors, value: -> {
-        song_info_table.reject(&:zero?).uniq
+        song_info_table.reject(&:zero?).sort.uniq
       }
 
       skip length: 28
