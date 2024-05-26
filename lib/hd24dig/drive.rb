@@ -56,12 +56,12 @@ module HD24Dig
       )
     end
 
-    def extract_audio(dir:, project_nums: nil, song_nums: nil, &block)
+    def extract_audio(dir:, project_nums: nil, song_nums: nil)
       @projects.each do |project|
         if project_nums.nil? || project_nums.include?(project.num)
           project.songs.each do |song|
             if song_nums.nil? || song_nums.include?(song.num)
-              song.extract_audio(dir:, &block)
+              song.extract_audio(dir:)
             end
           end
         end

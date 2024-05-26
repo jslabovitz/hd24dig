@@ -43,7 +43,7 @@ module HD24Dig
       @sample_rate > 48000
     end
 
-    def extract_audio(dir:, extension: nil, &block)
+    def extract_audio(dir:, extension: nil)
       dir.mkpath
       pcm_files = make_track_paths(dir:, extension: '.pcm')
       pcm_ios = pcm_files.map { |p|
