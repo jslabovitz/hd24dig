@@ -1,8 +1,11 @@
 # TODO
 
+
 ## Now
 
-- Do full test, with hi-res.
+- Figure out why some tracks in hi-res songs seem cut off at beginning.
+  - FTP all tracks and compare with extracted tracks.
+- Add clone test.
 - Remove local gem references from Gemfile.
   - push/publish midi-mmc, pitch, tone-gen
 - Rename 'clone' to 'copy'?
