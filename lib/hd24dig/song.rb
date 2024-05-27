@@ -7,6 +7,7 @@ module HD24Dig
       sample_depth
       duration
       num_tracks
+      num_channels
       tracks
     ]
     attr_accessor *ATTRS
@@ -15,6 +16,7 @@ module HD24Dig
     def initialize(**)
       @tracks = []
       super
+      make_tracks if @num_tracks
     end
 
     def comparable_attributes
@@ -23,6 +25,17 @@ module HD24Dig
 
     def inspectable_attributes
       super + ATTRS
+    end
+
+    def make_tracks
+      @num_tracks.times do
+        add_track(
+          Track.new(
+            name: 'Track',
+            channels: num_channels.times.map { Channel.new(name: 'Channel') },
+          )
+        )
+      end
     end
 
     def tracks=(tracks)
@@ -51,6 +64,17 @@ module HD24Dig
 
     def resolution
       '%d/%d' % [@sample_depth, @sample_rate / 1000]
+    end
+
+    def num_channels
+      @num_channels ||= case @sample_rate
+      when 44100, 48000
+        1
+      when 88200, 96000
+        2
+      else
+        raise
+      end
     end
 
     def extract_audio(dir: nil)
@@ -99,27 +123,9 @@ module HD24Dig
       @sample_rate = song_info.sample_rate
       @sample_depth = song_info.sample_depth
       @num_samples = song_info.num_samples
-      duration_secs = @num_samples.to_f / @sample_rate
-      @num_tracks = song_info.num_tracks
-      case @sample_rate
-      when 44100, 48000
-        num_channels = 1
-      when 88200, 96000
-        num_channels = 2
-        @num_tracks /= 2
-        duration_secs *= 2
-      else
-        raise
-      end
-      @num_tracks.times do
-        add_track(
-          Track.new(
-            name: 'Track',
-            channels: num_channels.times.map { Channel.new(name: 'Channel') },
-          )
-        )
-      end
-      @duration = Duration.from_seconds(duration_secs)
+      @num_tracks = song_info.num_tracks / num_channels
+      make_tracks
+      @duration = Duration.from_seconds((@num_samples.to_f / @sample_rate) * num_channels)
       file_allocation_info = read_record(Records::FileAllocationInfo, sector: sector + 2, count: 5)
       @block_ranges = file_allocation_info.file_allocation_block_ranges
       @num_sectors_per_sub_block = song_info.num_sectors_per_sub_block
