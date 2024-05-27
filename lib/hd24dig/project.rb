@@ -27,6 +27,7 @@ module HD24Dig
     end
 
     def add_song(song)
+      song = Song.new(**song) if song.kind_of?(Hash)
       song.num = @songs.length + 1
       song.project = self
       @songs << song

@@ -31,6 +31,7 @@ module HD24Dig
     end
 
     def add_project(project)
+      project = Project.new(**project) if project.kind_of?(Hash)
       project.num = @projects.length + 1
       project.drive = self
       @projects << project

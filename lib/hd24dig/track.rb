@@ -27,6 +27,7 @@ module HD24Dig
     end
 
     def add_channel(channel)
+      channel = Channel.new(**channel) if channel.kind_of?(Hash)
       channel.num = @channels.length + 1
       channel.track = self
       @channels << channel

@@ -44,6 +44,7 @@ module HD24Dig
     end
 
     def add_track(track)
+      track = Track.new(**track) if track.kind_of?(Hash)
       track.num = @tracks.length + 1
       track.song = self
       @tracks << track
