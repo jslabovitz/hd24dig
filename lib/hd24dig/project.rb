@@ -3,26 +3,40 @@ module HD24Dig
   class Project < Part
 
     ATTRS = %i[
-      name
-      num
       songs
     ]
     attr_accessor *ATTRS
     attr_accessor :drive
 
+    def initialize(**)
+      @songs = []
+      super
+    end
+
+    def comparable_attributes
+      super + ATTRS
+    end
+
+    def inspectable_attributes
+      super + ATTRS
+    end
+
     def songs=(songs)
-      @songs = songs.each_with_index.map do |s, i|
-        s.num = i + 1
-        s.project = self
-        s
-      end
+      @songs = []
+      songs.each { |s| add_song(s) }
+    end
+
+    def add_song(song)
+      song.num = @songs.length + 1
+      song.project = self
+      @songs << song
     end
 
     def read(sector)
       project_info = read_record(Records::ProjectInfo, sector:)
       @name = project_info.project_name
-      @songs = project_info.song_info_sectors.each_with_index.map do |song_sector, song_idx|
-        Song.read(fs: @fs, sector: song_sector, num: song_idx + 1, project: self)
+      project_info.song_info_sectors.each do |song_sector|
+        add_song(Song.read(fs: @fs, sector: song_sector))
       end
     end
 

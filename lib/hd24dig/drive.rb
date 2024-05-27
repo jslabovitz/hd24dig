@@ -3,29 +3,40 @@ module HD24Dig
   class Drive < Part
 
     ATTRS = %i[
-      name
       projects
     ]
     attr_accessor *ATTRS
-
-    attr_accessor :audio_block_size
 
     def self.open(path, clone: nil)
       fs = FileSystem.new(file: path, clone:)
       read(fs:, sector: 0)
     end
 
+    def initialize(**)
+      @projects = []
+      super
+    end
+
+    def comparable_attributes
+      super + ATTRS
+    end
+
+    def inspectable_attributes
+      super + ATTRS
+    end
+
     def projects=(projects)
-      @projects = projects.each_with_index.map do |p, i|
-        p.num = i + 1
-        p.drive = self
-        p
-      end
+      @projects = []
+      projects.each { |p| add_project(p) }
+    end
+
+    def add_project(project)
+      project.num = @projects.length + 1
+      project.drive = self
+      @projects << project
     end
 
     INFO_HEADER = {
-      'project #' => :right,
-      'song #' => :right,
       'drive' => :left,
       'project' => :left,
       'song' => :left,
@@ -39,11 +50,9 @@ module HD24Dig
       @projects.each do |project|
         project.songs.each do |song|
           table << [
-            project.num,
-            song.num,
-            @name,
-            project.name,
-            song.name,
+            full_name,
+            project.full_name,
+            song.full_name,
             song.duration,
             song.num_tracks,
             song.resolution,
@@ -56,7 +65,7 @@ module HD24Dig
       )
     end
 
-    def extract_audio(dir:, project_nums: nil, song_nums: nil)
+    def extract_audio(dir: nil, project_nums: nil, song_nums: nil)
       @projects.each do |project|
         if project_nums.nil? || project_nums.include?(project.num)
           project.songs.each do |song|
@@ -71,8 +80,7 @@ module HD24Dig
     def clone
       @projects.each do |project|
         project.songs.each do |song|
-          null_ios = [nil] * song.num_tracks
-          song.extract_tracks(null_ios)
+          song.extract_audio(dir: nil)
         end
       end
     end
@@ -98,14 +106,13 @@ module HD24Dig
           raise UnexpectedData, "validation failed: expected #{key} = #{value.inspect}, but was #{value2.inspect}"
         end
       end
-      @audio_block_size = superblock.audio_block_size
     end
 
     def read_drive_info(sector)
       drive_info = read_record(Records::DriveInfo, sector:)
       @name = drive_info.drive_name
-      @projects = drive_info.sectors_of_projects.reject(&:zero?).each_with_index.map do |project_sector, project_idx|
-        Project.read(fs: @fs, sector: project_sector, num: project_idx + 1, drive: self)
+      drive_info.sectors_of_projects.reject(&:zero?).each do |project_sector|
+        add_project(Project.read(fs: @fs, sector: project_sector))
       end
     end
 

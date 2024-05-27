@@ -3,16 +3,38 @@ module HD24Dig
   class Song < Part
 
     ATTRS = %i[
-      num
-      name
       sample_rate
       sample_depth
       duration
       num_tracks
+      tracks
     ]
     attr_accessor *ATTRS
-
     attr_accessor :project
+
+    def initialize(**)
+      @tracks = []
+      super
+    end
+
+    def comparable_attributes
+      super + ATTRS
+    end
+
+    def inspectable_attributes
+      super + ATTRS
+    end
+
+    def tracks=(tracks)
+      @tracks = []
+      tracks.each { |t| add_track(t) }
+    end
+
+    def add_track(track)
+      track.num = @tracks.length + 1
+      track.song = self
+      @tracks << track
+    end
 
     def duration=(duration)
       @duration = case duration
@@ -27,110 +49,45 @@ module HD24Dig
       end
     end
 
-    def full_name_elements
-      @full_name_elements ||= [project.drive.name, project.name, name]
-    end
-
-    def full_name
-      @full_name ||= full_name_elements.join(' / ')
-    end
-
     def resolution
-      '%d/%d' % [sample_depth, sample_rate / 1000]
+      '%d/%d' % [@sample_depth, @sample_rate / 1000]
     end
 
-    def high_resolution?
-      @sample_rate > 48000
-    end
-
-    def extract_audio(dir:, extension: nil)
-      dir.mkpath
-      pcm_files = make_track_paths(dir:, extension: '.pcm')
-      pcm_ios = pcm_files.map { |p|
-        p.dirname.mkpath
-        p.open('wb')
-      }
-      extract_tracks(pcm_ios, &block)
-      pcm_ios.each(&:close)
-      converted_files = convert_pcm_files(pcm_files, dir:, extension:, &block)
-      pcm_files.map(&:unlink)
-      converted_files
-    end
-
-    def make_track_paths(dir:, extension: nil)
-      @num_tracks.times.map do |track|
-        if high_resolution?
-          2.times.map do |subtrack|
-            path_for_track(track, dir:, subtrack:, extension:)
-          end
+    def extract_audio(dir: nil)
+      song_dir = dir&.join(@project.drive.full_name, @project.full_name, full_name)
+      channel_ios = @tracks.map(&:channels).flatten.map do |channel|
+        if dir
+          path = (song_dir / channel.track.full_name / channel.full_name).add_extension('.pcm')
+          path.dirname.mkpath
+          io = path.open('wb')
         else
-          path_for_track(track, dir:, extension:)
+          io = nil
         end
-      end.flatten
-    end
-
-    def path_for_track(track, dir:, subtrack: nil, extension: nil)
-      file = 'Track %02d%s' % [
-        track + 1,
-        subtrack ? ('-%d' % (subtrack + 1)) : '',
-      ]
-      path = dir.join(@project.drive.name, @project.name, '%02d - %s' % [@num, @name], file)
-      path.add_extension(extension || '.wav')
-    end
-
-    def extract_tracks(track_ios)
+        [channel, io]
+      end.to_h
       samples_to_read = @num_samples
       @block_ranges.each do |block_range|
-        fs.seek_sector(block_range.begin)
+        @fs.seek_sector(block_range.begin)
         block_range.count.times do
           sub_block_samples = [samples_to_read, @num_samples_per_sub_block].min
-          sub_block_bytes = sub_block_samples * 3
-          track_ios.each do |track_io|
-            data = fs.read_sectors(@num_sectors_per_sub_block)
-            track_io.write(data[0, sub_block_bytes]) if track_io
+          sub_block_bytes = sub_block_samples * 3  #FIXME: don't use constant
+          channel_ios.values.each do |io|
+            data = @fs.read_sectors(@num_sectors_per_sub_block) or raise "Unexpected EOF"
+            io&.write(data[0, sub_block_bytes])
           end
           samples_to_read -= sub_block_samples
         end
       end
-    end
-
-    def sox_input_arguments(rate:)
-      [
-        '--type', 'raw',
-        '--rate', rate,
-        '--bits', 24,
-        '--encoding', 'signed-integer',
-        '--channels', 1,
-      ]
-    end
-
-    def convert_pcm_files(pcm_files, dir:, extension:)
-      @num_tracks.times.map do |track|
-        converted_file = path_for_track(track, dir:, extension:)
-        cmd = ['sox']
-        if high_resolution?
-          cmd += [
-            '--combine', 'merge',
-          ]
-          pcm_files[track, 2].each do |pcm_file|
-            cmd += [
-              sox_input_arguments(rate: @sample_rate / 2),
-              pcm_file,
-            ]
-          end
-        else
-          cmd += [
-            sox_input_arguments(rate: @sample_rate),
-            pcm_files[track],
-          ]
+      channel_ios.values.compact.each(&:close)
+      if dir
+        @tracks.map do |track|
+          channel_files = track.channels.map { |c| channel_ios[c].path }
+          track_dir = song_dir / track.full_name
+          wav_file = track_dir.add_extension('.wav')
+          track.demux_channels(channel_files, wav_file)
+          # track_dir.rmtree
+          wav_file
         end
-        cmd += [
-          '--rate', @sample_rate,
-          '--channels', 1,
-        ]
-        cmd << converted_file
-        HD24Dig.run_command(cmd)
-        converted_file
       end
     end
 
@@ -142,11 +99,27 @@ module HD24Dig
       @sample_rate = song_info.sample_rate
       @sample_depth = song_info.sample_depth
       @num_samples = song_info.num_samples
-      secs = @num_samples.to_f / @sample_rate
-      secs *= 2 if high_resolution?
-      @duration = Duration.from_seconds(secs)
-      @num_actual_tracks = song_info.num_tracks
-      @num_tracks = high_resolution? ? (@num_actual_tracks / 2) : @num_actual_tracks
+      duration_secs = @num_samples.to_f / @sample_rate
+      @num_tracks = song_info.num_tracks
+      case @sample_rate
+      when 44100, 48000
+        num_channels = 1
+      when 88200, 96000
+        num_channels = 2
+        @num_tracks /= 2
+        duration_secs *= 2
+      else
+        raise
+      end
+      @num_tracks.times do
+        add_track(
+          Track.new(
+            name: 'Track',
+            channels: num_channels.times.map { Channel.new(name: 'Channel') },
+          )
+        )
+      end
+      @duration = Duration.from_seconds(duration_secs)
       file_allocation_info = read_record(Records::FileAllocationInfo, sector: sector + 2, count: 5)
       @block_ranges = file_allocation_info.file_allocation_block_ranges
       @num_sectors_per_sub_block = song_info.num_sectors_per_sub_block

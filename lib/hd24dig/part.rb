@@ -2,6 +2,11 @@ module HD24Dig
 
   class Part
 
+    ATTRS = %i[
+      num
+      name
+    ]
+    attr_accessor *ATTRS
     attr_accessor :fs   # file system
 
     include SetParams
@@ -10,16 +15,34 @@ module HD24Dig
       new(**params).tap { |p| p.send(:read, sector) }
     end
 
-    def inspect
-      to_h.inspect
-    end
-
-    def to_h
-      self.class.const_get(:ATTRS).map { |k| [k, send(k)] }.to_h
+    def full_name
+      if num
+        '%02d - %s' % [num, @name]
+      else
+        @name
+      end
     end
 
     def ==(other)
-      to_h == other&.to_h
+      comparable_attributes.each do |key|
+        if send(key) != other&.send(key)
+;;warn "#{self.class}: #{key.inspect} different: #{send(key)} != #{other&.send(key)}"
+          return false
+        end
+      end
+      true
+    end
+
+    def comparable_attributes
+      ATTRS
+    end
+
+    def inspectable_attributes
+      ATTRS
+    end
+
+    def inspect
+      "<#{self.class.name} #{inspectable_attributes.map { |a| [a, send(a)] }.to_h.inspect}"
     end
 
     private

@@ -21,6 +21,7 @@ module HD24Dig
 
   def self.run_command(*args)
     $cmd ||= TTY::Command.new(printer: :quiet)
+    # $cmd ||= TTY::Command.new()
     $cmd.run(*args.flatten.compact.map(&:to_s), only_output_on_error: true)
   end
 
@@ -50,9 +51,11 @@ require_relative 'hd24dig/duration'
 require_relative 'hd24dig/file_system'
 
 require_relative 'hd24dig/part'
+require_relative 'hd24dig/channel'
 require_relative 'hd24dig/drive'
 require_relative 'hd24dig/project'
 require_relative 'hd24dig/song'
+require_relative 'hd24dig/track'
 
 require_relative 'hd24dig/records/drive_info'
 require_relative 'hd24dig/records/file_allocation_info'
