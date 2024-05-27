@@ -10,7 +10,7 @@ task :build_test_harness do
   OUTPUT_CHANNELS = 2
   TEST_SETUP_FILE = Path.new('test/test_setup.rb')
 
-  @drive = eval(TEST_SETUP_FILE.read)
+  @drive = HD24Dig.load_drive(TEST_SETUP_FILE)
 
   @drive.projects.each do |project|
     project.songs.each do |song|

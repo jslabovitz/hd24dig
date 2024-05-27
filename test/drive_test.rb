@@ -9,7 +9,7 @@ module HD24Dig::Tests
     include HD24Dig::TestHelpers
 
     def setup
-      @expected_drive = eval(TEST_SETUP_FILE.read)
+      @expected_drive = HD24Dig.load_drive(TEST_SETUP_FILE)
       @drive = HD24Dig.open_drive(DRIVE_IMAGE_FILE)
     end
 

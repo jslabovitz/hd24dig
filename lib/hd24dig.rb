@@ -19,6 +19,10 @@ module HD24Dig
     end
   end
 
+  def self.load_drive(path)
+    Drive.new(**eval(path.read))
+  end
+
   def self.run_command(*args)
     $cmd ||= TTY::Command.new(printer: :quiet)
     # $cmd ||= TTY::Command.new()
