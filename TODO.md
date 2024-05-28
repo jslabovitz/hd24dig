@@ -7,13 +7,13 @@
   - FTP all tracks and compare with extracted tracks.
 - Remove local gem references from Gemfile.
   - push/publish midi-mmc, pitch, tone-gen
-- Rename 'clone' to 'copy'?
-- Finish README.
-- Add license.
+- Make Parts module and move all parts under it.
 
 
 ## Soon
 
+- Finish README.
+- Add license.
 - Push to Github.
 - Release to Rubygems.
 - Post announcment to hd24 list.
