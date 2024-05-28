@@ -11,7 +11,7 @@ module HD24Dig
   class UnexpectedData < StandardError; end
 
   def self.open_drive(path, drop_privileges: true, copy_file: nil)
-    Drive.open(path, copy_file:).tap do
+    Parts::Drive.open(path, copy_file:).tap do
       if drop_privileges && ENV['SUDO_USER']   # running under sudo?
         Process::Sys.setgid(ENV['SUDO_GID'].to_i)
         Process::Sys.setuid(ENV['SUDO_UID'].to_i)
@@ -20,7 +20,7 @@ module HD24Dig
   end
 
   def self.load_drive(path)
-    Drive.new(**eval(path.read))
+    Parts::Drive.new(**eval(path.read))
   end
 
   def self.run_command(*args)
@@ -55,11 +55,11 @@ require_relative 'hd24dig/duration'
 require_relative 'hd24dig/file_system'
 
 require_relative 'hd24dig/part'
-require_relative 'hd24dig/channel'
-require_relative 'hd24dig/drive'
-require_relative 'hd24dig/project'
-require_relative 'hd24dig/song'
-require_relative 'hd24dig/track'
+require_relative 'hd24dig/parts/channel'
+require_relative 'hd24dig/parts/drive'
+require_relative 'hd24dig/parts/project'
+require_relative 'hd24dig/parts/song'
+require_relative 'hd24dig/parts/track'
 
 require_relative 'hd24dig/records/drive_info'
 require_relative 'hd24dig/records/file_allocation_info'

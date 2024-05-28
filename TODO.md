@@ -7,7 +7,6 @@
   - FTP all tracks and compare with extracted tracks.
 - Remove local gem references from Gemfile.
   - push/publish midi-mmc, pitch, tone-gen
-- Make Parts module and move all parts under it.
 
 
 ## Soon
