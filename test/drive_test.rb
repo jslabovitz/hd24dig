@@ -37,6 +37,13 @@ module HD24Dig::Tests
       end
     end
 
+    def test_clone
+      clone_file = TMP_DIR / 'clone.hd24'
+      drive = HD24Dig.open_drive(DRIVE_IMAGE_FILE, clone: clone_file)
+      drive.clone
+      assert { clone_file.exist? }
+    end
+
   end
 
 end
