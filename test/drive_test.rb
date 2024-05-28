@@ -27,7 +27,7 @@ module HD24Dig::Tests
           expected_duration = song.duration
           tone_gen = ToneGen.new
           files.each_with_index do |file, i|
-            duration = HD24Dig::Duration.from_file(file)
+            duration = HD24Dig::Duration.new(file)
             assert { duration == expected_duration }
             pitch = tone_gen.pitch_for_file(file)
             expected_pitch = tone_gen.make_pitch(index: i)

@@ -51,16 +51,7 @@ module HD24Dig
     end
 
     def duration=(duration)
-      @duration = case duration
-      when Duration
-        duration
-      when Array
-        Duration.from_array(duration)
-      when String
-        Duration.from_string(duration)
-      else
-        raise ArgumentError
-      end
+      @duration = Duration.new(duration)
     end
 
     def resolution
@@ -126,7 +117,7 @@ module HD24Dig
       @num_samples = song_info.num_samples
       @num_tracks = song_info.num_tracks / num_channels
       make_tracks
-      @duration = Duration.from_seconds((@num_samples.to_f / @sample_rate) * num_channels)
+      @duration = Duration.new((@num_samples.to_f / @sample_rate) * num_channels)
       file_allocation_info = read_record(Records::FileAllocationInfo, sector: sector + 2, count: 5)
       @block_ranges = file_allocation_info.file_allocation_block_ranges
       @num_sectors_per_sub_block = song_info.num_sectors_per_sub_block

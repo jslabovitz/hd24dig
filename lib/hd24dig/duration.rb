@@ -9,72 +9,96 @@ module HD24Dig
 
     include SetParams
 
-    def self.from_seconds(seconds)
+    def initialize(obj)
+      @hours = @minutes = @seconds = @frames = 0
+      case obj
+      when nil
+        # nothing
+      when Duration
+        set(obj.to_h)
+      when Numeric
+        set_from_seconds(obj)
+      when Array
+        set_from_array(obj)
+      when String
+        set_from_string(obj)
+      when Path
+        set_from_file(obj)
+      when Hash
+        set(obj)
+      else
+        raise ArgumentError, "Unknown duration specification: #{obj.inspect}"
+      end
+    end
+
+    def set_from_seconds(seconds)
       int_seconds = seconds.to_i
       frames = ((seconds - int_seconds) * 30).round
       hours, int_seconds = int_seconds.divmod(3600)
       minutes, seconds = int_seconds.divmod(60)
-      new(hours:, minutes:, seconds:, frames:)
+      set(hours:, minutes:, seconds:, frames:)
     end
 
-    def self.from_array(array)
+    def set_from_array(array)
       raise ArgumentError if array.length > 4
-      new(
-        hours: array[0] || 0,
+      set(
+        hours:   array[0] || 0,
         minutes: array[1] || 0,
         seconds: array[2] || 0,
-        frames: array[3] || 0)
+        frames:  array[3] || 0)
     end
 
-    def self.from_string(str)
-      from_array(str.split(':').map(&:to_i))
+    def set_from_string(string)
+      set_from_array(string.split(':').map(&:to_i))
     end
 
-    def self.from_file(file)
+    def set_from_file(file)
       out, _ = HD24Dig.run_command('soxi', '-D', file)
-      from_seconds(out.to_f)
-    end
-
-    def initialize(**)
-      @hours = @minutes = @seconds = @frames = 0
-      super
+      set_from_seconds(out.to_f)
     end
 
     def ==(other)
-      to_array == other&.to_array
+      to_a == other&.to_a
     end
 
     def +(other)
-      self.class.from_seconds(to_seconds + other.to_seconds)
+      self.class.new(to_seconds + other.to_seconds)
     end
 
     def -(other)
-      self.class.from_seconds(to_seconds - other.to_seconds)
+      self.class.new(to_seconds - other.to_seconds)
     end
 
     def *(other)
-      self.class.from_seconds(to_seconds * other.to_seconds)
+      self.class.new(to_seconds * other.to_seconds)
     end
 
     def /(other)
-      self.class.from_seconds(to_seconds / other.to_seconds)
+      self.class.new(to_seconds / other.to_seconds)
     end
 
     def to_s
-      '%02d:%02d:%02d:%02d' % [
-        @hours,
-        @minutes,
-        @seconds,
-        @frames,
-      ]
+      '%02d:%02d:%02d:%02d' % to_a
     end
 
     def to_seconds
       (@hours * 3600) + (@minutes * 60) + @seconds + (@frames / 30.0)
     end
 
-    def to_array
+    def to_f
+      to_seconds
+    end
+
+    def to_i
+      to_seconds.to_i
+    end
+
+    def to_a
       [@hours, @minutes, @seconds, @frames]
+    end
+
+    def to_h
+      { hours:, minutes:, seconds:, frames: }
     end
 
   end
