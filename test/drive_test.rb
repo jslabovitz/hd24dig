@@ -9,6 +9,8 @@ module HD24Dig::Tests
     include HD24Dig::TestHelpers
 
     def setup
+      TMP_DIR.rmtree if TMP_DIR.exist?
+      TMP_DIR.mkpath
       @expected_drive = HD24Dig.load_drive(TEST_SETUP_FILE)
       @drive = HD24Dig.open_drive(DRIVE_IMAGE_FILE)
     end
@@ -18,8 +20,6 @@ module HD24Dig::Tests
     end
 
     def test_extract
-      TMP_DIR.rmtree if TMP_DIR.exist?
-      TMP_DIR.mkpath
       @drive.projects.each do |project|
         project.songs.each do |song|
           files = song.extract_audio(dir: TMP_DIR)
