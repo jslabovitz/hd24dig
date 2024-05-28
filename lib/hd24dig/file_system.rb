@@ -3,7 +3,7 @@ module HD24Dig
   class FileSystem
 
     attr_accessor :file
-    attr_accessor :clone
+    attr_accessor :copy_file
 
     SECTOR_SIZE = 512
 
@@ -12,15 +12,15 @@ module HD24Dig
     def initialize(**params)
       super
       @io = @file.open('rb')
-      @clone_io = @clone&.open('wb')
+      @copy_io = @copy_file&.open('wb')
     end
 
     def read_sectors(count=1)
       pos = @io.tell
       @io.read(count * SECTOR_SIZE).tap do |data|
-        if @clone_io
-          @clone_io.seek(pos)
-          @clone_io.write(data)
+        if @copy_io
+          @copy_io.seek(pos)
+          @copy_io.write(data)
         end
       end
     end

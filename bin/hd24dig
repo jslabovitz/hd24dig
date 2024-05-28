@@ -18,8 +18,8 @@ rescue Simple::CommandParser::UsageError => error
       be saved to that directory. Otherwise, files will be saved in the current working
       directory.
 
-    clone DRIVE IMAGE
-      Clones DRIVE to a file at IMAGE. Only copies blocks that are actually in use.
+    copy DRIVE IMAGE
+      Copies DRIVE to a file at IMAGE. Only copies blocks that are actually in use.
       Creates a sparse image file, if filesystem supports that feature.
 
     info DRIVE

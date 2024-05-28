@@ -7,8 +7,8 @@ module HD24Dig
     ]
     attr_accessor *ATTRS
 
-    def self.open(path, clone: nil)
-      fs = FileSystem.new(file: path, clone:)
+    def self.open(drive_file, copy_file: nil)
+      fs = FileSystem.new(file: drive_file, copy_file:)
       read(fs:, sector: 0)
     end
 
@@ -78,7 +78,7 @@ module HD24Dig
       end
     end
 
-    def clone
+    def copy
       @projects.each do |project|
         project.songs.each do |song|
           song.extract_audio(dir: nil)
