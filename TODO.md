@@ -6,7 +6,7 @@
 - Figure out why some tracks in hi-res songs seem cut off at beginning.
   - FTP all tracks and compare with extracted tracks.
 - Remove local gem references from Gemfile.
-  - push/publish midi-mmc, pitch, tone-gen
+  - push/publish midi-mmc, pitch
 
 
 ## Soon
