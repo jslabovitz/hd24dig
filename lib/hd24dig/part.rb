@@ -16,11 +16,7 @@ module HD24Dig
     end
 
     def full_name
-      if num
-        '%02d - %s' % [num, @name]
-      else
-        @name
-      end
+      '%s%02d%s' % [self.class.name.split('::').last, @num, @name && " - #{@name}"]
     end
 
     def ==(other)

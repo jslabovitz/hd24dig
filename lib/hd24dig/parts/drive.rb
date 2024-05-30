@@ -16,6 +16,7 @@ module HD24Dig
 
       def initialize(**)
         @projects = []
+        @num = 1
         super
       end
 

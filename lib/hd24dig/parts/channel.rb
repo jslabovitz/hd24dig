@@ -17,10 +17,6 @@ module HD24Dig
         super + ATTRS
       end
 
-      def full_name
-        '%s %02d' % [@name, num]
-      end
-
     end
 
   end

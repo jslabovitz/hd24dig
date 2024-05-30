@@ -32,10 +32,7 @@ module HD24Dig
       def make_tracks
         @num_tracks.times do
           add_track(
-            Track.new(
-              name: 'Track',
-              channels: num_channels.times.map { Channel.new(name: 'Channel') },
-            )
+            Track.new(channels: num_channels.times.map { Channel.new })
           )
         end
       end

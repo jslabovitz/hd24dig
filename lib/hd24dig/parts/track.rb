@@ -35,10 +35,6 @@ module HD24Dig
         @channels << channel
       end
 
-      def full_name
-        '%s %02d' % [@name, num]
-      end
-
       def channel_sample_rate
         @channel_sample_rate ||= (@song.sample_rate / @channels.count)
       end
