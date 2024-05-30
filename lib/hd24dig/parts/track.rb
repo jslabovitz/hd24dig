@@ -44,25 +44,31 @@ module HD24Dig
       end
 
       def demux_channels(input_files, output_file)
-        cmd = ['ffmpeg']
-        input_files.each do |input_file|
-          cmd += [
-            '-f', 's24le',
-            '-ar', channel_sample_rate,
-            '-ac', 1,
-            '-i', input_file,
-          ]
+        intermediate_file = nil
+        if input_files.length > 1
+          intermediate_file = output_file.replace_extension('.pcm')
+          intermediate_file.open('wb') do |output|
+            inputs = input_files.map { |f| f.open('rb') }
+            until inputs.first.eof do
+              inputs.each do |input|
+                data = input.read(3) or break
+                output.write(data)
+              end
+            end
+          end
         end
-        if input_files.count > 1
-          cmd += [
-            '-filter_complex', make_filter_complex,
-          ]
-        end
-        cmd += [
-          '-acodec', 'pcm_s24le',
+        cmd = [
+          'sox',
+          '-t', 'raw',
+          '-r', @song.sample_rate,
+          '-b', 24,
+          '-e', 'signed-integer',
+          '-c', 1,
+          intermediate_file || input_files.first,
           output_file,
         ]
         HD24Dig.run_command(cmd)
+        intermediate_file&.unlink
       end
 
       def make_filter_complex

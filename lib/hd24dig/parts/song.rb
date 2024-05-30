@@ -99,11 +99,11 @@ module HD24Dig
         channel_ios.values.compact.each(&:close)
         if dir
           @tracks.map do |track|
-            channel_files = track.channels.map { |c| channel_ios[c].path }
+            channel_files = track.channels.map { |c| Path.new(channel_ios[c].path) }
             track_dir = song_dir / track.full_name
             wav_file = track_dir.add_extension('.wav')
             track.demux_channels(channel_files, wav_file)
-            # track_dir.rmtree
+            track_dir.rmtree
             wav_file
           end
         end
