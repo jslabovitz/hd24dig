@@ -40,7 +40,7 @@ task :build_test_harness do
         output_type: OUTPUT_TYPE,
       )
       builder.build
-      # builder.record
+      builder.record
     end
   end
 
