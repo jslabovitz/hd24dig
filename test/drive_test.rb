@@ -1,4 +1,4 @@
-require 'tone-gen'
+require 'pitch'
 
 require_relative 'helpers'
 
@@ -25,12 +25,11 @@ module HD24Dig::Tests
           files = song.extract_audio(dir: TMP_DIR)
           assert { files.length == song.num_tracks }
           expected_duration = song.duration
-          tone_gen = ToneGen.new
           files.each_with_index do |file, i|
             duration = HD24Dig::Duration.new(file)
             assert { duration == expected_duration }
-            pitch = tone_gen.pitch_for_file(file)
-            expected_pitch = tone_gen.make_pitch(index: i)
+            pitch = Pitch.read_from_file(file)
+            expected_pitch = PITCH_BASE + (i * PITCH_INTERVAL)
             assert { pitch == expected_pitch }
           end
         end

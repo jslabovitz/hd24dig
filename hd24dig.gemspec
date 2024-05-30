@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'midi-mmc', '~> 0.1'
   gem.add_development_dependency 'minitest', '~> 5.22'
   gem.add_development_dependency 'minitest-power_assert', '~> 0.3'
-  gem.add_development_dependency 'tone-gen', '~> 0.1'
+  gem.add_development_dependency 'pitch', '~> 0.1'
   gem.add_development_dependency 'rake', '~> 13.2'
   gem.add_development_dependency 'unimidi', '~> 0.5'
 
