@@ -22,8 +22,6 @@ module HD24Dig
         set_from_array(obj)
       when String
         set_from_string(obj)
-      when Path
-        set_from_file(obj)
       when Hash
         set(obj)
       else
@@ -50,11 +48,6 @@ module HD24Dig
 
     def set_from_string(string)
       set_from_array(string.split(':').map(&:to_i))
-    end
-
-    def set_from_file(file)
-      out, _ = HD24Dig.run_command('soxi', '-D', file)
-      set_from_seconds(out.to_f)
     end
 
     def ==(other)

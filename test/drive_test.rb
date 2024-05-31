@@ -28,7 +28,7 @@ module HD24Dig::Tests
           expected_duration = song.duration
           files.each_with_index do |file, i|
             # duration
-            duration = HD24Dig::Duration.new(file)
+            duration = file_duration(file)
             assert { duration == expected_duration }
             # pitch
             pitch = Pitch.read_from_file(file)

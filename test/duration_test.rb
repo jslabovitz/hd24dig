@@ -29,12 +29,6 @@ module HD24Dig::Tests
       assert { secs == 1.5 }
     end
 
-    def test_file
-      duration = HD24Dig::Duration.new(Path.new('test/tone.flac'))
-      secs = duration.to_seconds
-      assert { secs == 5 }
-    end
-
     def test_eq
       d1 = HD24Dig::Duration.new(5)
       d2 = HD24Dig::Duration.new('00:00:05:00')
