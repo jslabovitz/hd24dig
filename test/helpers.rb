@@ -12,6 +12,20 @@ module HD24Dig
 
     include TestConstants
 
+    SOX_PARAMS = [
+      '--type', 'raw',
+      '--encoding', 'signed-integer',
+      '--bits', 24,
+    ]
+
+    def pcm_files_equivalent?(file1, file2)
+      file1_pcm = file1.replace_extension('.pcm')
+      file2_pcm = file2.replace_extension('.pcm')
+      HD24Dig.run_command('sox', file1, SOX_PARAMS, file1_pcm) or raise "Can't convert #{file1} to #{file1_pcm}"
+      HD24Dig.run_command('sox', file2, SOX_PARAMS, file2_pcm) or raise "Can't convert #{file2} to #{file2_pcm}"
+      HD24Dig.run_command('cmp', file1_pcm, file2_pcm) or warn "different: #{file2_pcm} != #{file1_pcm}"
+    end
+
   end
 
 end

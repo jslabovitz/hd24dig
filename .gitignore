@@ -17,4 +17,5 @@ test/images
 test/tmp
 test/version_tmp
 test/test.hd24
+test/ftp
 tmp

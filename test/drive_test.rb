@@ -20,20 +20,28 @@ module HD24Dig::Tests
     end
 
     def test_extract
+      ftp_files = FTP_DIR.glob('**/*.wav').map { |p| [p.relative_to(FTP_DIR / 'Drive1'), p] }.to_h
       @drive.projects.each do |project|
         project.songs.each do |song|
-          files = song.extract_audio(dir: TMP_DIR)
-          assert { files.length == song.num_tracks }
+          files = song.extract_audio(dir: EXTRACT_DIR)
+          assert { files.count == song.num_tracks }
           expected_duration = song.duration
           files.each_with_index do |file, i|
+            # duration
             duration = HD24Dig::Duration.new(file)
             assert { duration == expected_duration }
+            # pitch
             pitch = Pitch.read_from_file(file)
             expected_pitch = PITCH_BASE + (i * PITCH_INTERVAL)
             assert { pitch == expected_pitch }
+            # data
+            ftp_file = ftp_files.delete(file.relative_to(EXTRACT_DIR / @drive.full_name))
+            assert { ftp_file != nil }
+            assert { pcm_files_equivalent?(ftp_file, file) }
           end
         end
       end
+      assert { ftp_files.empty? }
     end
 
     def test_copy

@@ -15,6 +15,8 @@ module HD24Dig
     OUTPUT_TYPE = 'coreaudio'
     OUTPUT_NAME = 'ZOOM U-44 Driver'
     NUM_OUTPUT_CHANNELS = 2
+    FTP_DIR = TEST_DIR / 'ftp'
+    EXTRACT_DIR = TMP_DIR / 'extract'
 
   end
 
