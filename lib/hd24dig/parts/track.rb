@@ -55,11 +55,11 @@ module HD24Dig
         end
         cmd = [
           'sox',
-          '-t', 'raw',
-          '-r', @song.sample_rate,
-          '-b', 24,
-          '-e', 'signed-integer',
-          '-c', 1,
+          '--type', 'raw',
+          '--rate', @song.sample_rate,
+          '--bits', 24,
+          '--encoding', 'signed-integer',
+          '--channels', 1,
           intermediate_file || input_files.first,
           output_file,
         ]
