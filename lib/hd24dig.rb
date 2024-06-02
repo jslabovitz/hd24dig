@@ -2,6 +2,7 @@ require 'bindata'
 require 'path'
 require 'set_params'
 require 'simple-command-parser'
+require 'timecode'
 require 'tty-command'
 require 'tty-table'
 require 'tty-screen'
@@ -9,6 +10,8 @@ require 'tty-screen'
 module HD24Dig
 
   class UnexpectedData < StandardError; end
+
+  TIMECODE_FPS = 30
 
   def self.open_drive(path, drop_privileges: true, copy_file: nil)
     Parts::Drive.open(path, copy_file:).tap do
@@ -51,7 +54,6 @@ module HD24Dig
 
 end
 
-require_relative 'hd24dig/duration'
 require_relative 'hd24dig/file_system'
 
 require_relative 'hd24dig/part'

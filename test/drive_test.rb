@@ -15,21 +15,21 @@ module HD24Dig::Tests
       @drive = HD24Dig.open_drive(DRIVE_IMAGE_FILE)
     end
 
-    def test_load
-      assert { @drive == @expected_drive }
-    end
-
     def test_extract
       ftp_files = FTP_DIR.glob('**/*.wav').map { |p| [p.relative_to(FTP_DIR / 'Drive1'), p] }.to_h
-      @drive.projects.each do |project|
-        project.songs.each do |song|
+      @drive.projects.each_with_index do |project, project_idx|
+        expected_project = @expected_drive.projects[project_idx]
+        assert { project == expected_project }
+        project.songs.each_with_index do |song, song_idx|
+          expected_song = expected_project.songs[song_idx]
+          assert { song == expected_song }
           files = song.extract_audio(dir: EXTRACT_DIR)
           assert { files.count == song.num_tracks }
-          expected_duration = song.duration
+          expected_num_samples = song.num_samples
           files.each_with_index do |file, i|
-            # duration
-            duration = file_duration(file)
-            assert { duration == expected_duration }
+            # samples
+            num_samples = num_samples_in_file(file)
+            assert { num_samples == expected_num_samples }
             # pitch
             pitch = Pitch.read_from_file(file)
             expected_pitch = PITCH_BASE + (i * PITCH_INTERVAL)

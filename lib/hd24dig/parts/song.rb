@@ -7,9 +7,10 @@ module HD24Dig
       ATTRS = %i[
         sample_rate
         sample_depth
-        duration
         num_tracks
-        num_channels
+        num_channel
+        num_samples
+        timecode
         tracks
       ]
       attr_accessor *ATTRS
@@ -22,7 +23,7 @@ module HD24Dig
       end
 
       def comparable_attributes
-        super + ATTRS
+        super + ATTRS - [:num_samples]
       end
 
       def inspectable_attributes
@@ -49,8 +50,8 @@ module HD24Dig
         @tracks << track
       end
 
-      def duration=(duration)
-        @duration = Duration.new(duration)
+      def timecode=(timecode)
+        @timecode = Timecode.new(timecode, TIMECODE_FPS)
       end
 
       def resolution
@@ -80,7 +81,7 @@ module HD24Dig
           end
           [channel, io]
         end.to_h
-        samples_to_read = @num_samples
+        samples_to_read = @num_samples_per_channel
         @block_ranges.each do |block_range|
           @fs.seek_sector(block_range.begin)
           block_range.count.times do
@@ -113,10 +114,12 @@ module HD24Dig
         @name = song_info.song_name
         @sample_rate = song_info.sample_rate
         @sample_depth = song_info.sample_depth
-        @num_samples = song_info.num_samples
+        @num_samples_per_channel = song_info.num_samples
+        @num_samples = @num_samples_per_channel * num_channels
         @num_tracks = song_info.num_tracks / num_channels
+        frames = ((@num_samples.to_f / @sample_rate) * TIMECODE_FPS).round
+        @timecode = Timecode.new(frames, TIMECODE_FPS)
         make_tracks
-        @duration = Duration.new((@num_samples.to_f / @sample_rate) * num_channels)
         file_allocation_info = read_record(Records::FileAllocationInfo, sector: sector + 2, count: 5)
         @block_ranges = file_allocation_info.file_allocation_block_ranges
         @num_sectors_per_sub_block = song_info.num_sectors_per_sub_block

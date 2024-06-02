@@ -26,9 +26,9 @@ module HD24Dig
       HD24Dig.run_command('cmp', file1_pcm, file2_pcm) or warn "different: #{file2_pcm} != #{file1_pcm}"
     end
 
-    def file_duration(file)
-      out, _ = HD24Dig.run_command('soxi', '-D', file)
-      Duration.new(out.to_f)
+    def num_samples_in_file(file)
+      out, _ = HD24Dig.run_command('soxi', '-s', file)
+      out.to_i
     end
 
   end

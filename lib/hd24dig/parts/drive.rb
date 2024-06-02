@@ -44,7 +44,7 @@ module HD24Dig
         'drive' => :left,
         'project' => :left,
         'song' => :left,
-        'duration' => :left,
+        'timecode' => :left,
         'tracks' => :right,
         'resolution' => :left,
       }
@@ -57,7 +57,7 @@ module HD24Dig
               full_name,
               project.full_name,
               song.full_name,
-              song.duration,
+              song.timecode,
               song.num_tracks,
               song.resolution,
             ]
