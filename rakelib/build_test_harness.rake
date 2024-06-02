@@ -30,7 +30,7 @@ task :build_test_harness do
       builder = TestSongBuilder.new(
         dir: song_dir,
         num_tracks: song.num_tracks,
-        duration: song.duration.to_seconds,
+        duration: song.timecode.to_seconds,
         rate: song.sample_rate,
         pitch_base: PITCH_BASE,
         pitch_interval: PITCH_INTERVAL,
