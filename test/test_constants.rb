@@ -1,3 +1,6 @@
+require 'path'
+require 'pitch'
+
 require_relative '../lib/hd24dig'
 
 module HD24Dig
