@@ -1,3 +1,6 @@
+require 'midi-mmc'
+require 'path'
+require 'pitch'
 require 'set_params'
 
 require_relative '../lib/hd24dig'
