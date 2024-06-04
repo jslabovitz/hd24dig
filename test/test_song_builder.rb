@@ -20,39 +20,39 @@ class TestSongBuilder
 
   def build
     pitch = @pitch_base.dup
-    @track_files = 0.step(by: @num_output_channels, to: num_tracks - 1).map do |track_start|
+    @tracks = 1.step(to: num_tracks, by: @num_output_channels).map do |track_start|
       track_range = track_start .. (track_start + @num_output_channels - 1)
       pitch_files = track_range.map do |track|
-        track_name = 'Track %02d' % (track + 1)
+        track_name = 'Track %02d' % track
         pitch_file = (@dir / track_name).add_extension('.wav')
         pitch.write_to_file(pitch_file, duration: @duration, rate: @rate)
         pitch += @pitch_interval
         pitch_file
       end
-      output_file = (dir / ('Tracks %02d-%02d' % [track_range.begin, track_range.end])).add_extension('.wav')
+      track_file = (dir / ('Tracks %02d-%02d' % [track_range.begin, track_range.end])).add_extension('.wav')
       HD24Dig.run_command(
         'sox',
         '--combine', 'merge',
         pitch_files,
-        output_file,
+        track_file,
         'gain', -6,
       )
       pitch_files.each(&:unlink)
-      [track_range, output_file]
+      [track_range, track_file]
     end.to_h
   end
 
   def record
     @mmc.reset
-    @track_files.each do |range, file|
-      puts '%s: %s' % [range, file]
+    @tracks.each do |track_range, track_file|
+      puts '%s: %s' % [track_range, track_file]
       begin
-        @mmc.write(range.to_a)
+        @mmc.arm_tracks(track_range.to_a)
         @mmc.goto_zero
         @mmc.record_strobe
         HD24Dig.run_command(
           'sox',
-          file,
+          track_file,
           @output_type && ['--type', @output_type],
           @output_name,
         )
@@ -61,7 +61,7 @@ class TestSongBuilder
       end
     end
     @mmc.goto_zero
-    @mmc.write(nil)
+    @mmc.arm_tracks(nil)
     @mmc.reset
   end
 
