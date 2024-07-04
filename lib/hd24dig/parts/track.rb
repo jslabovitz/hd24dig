@@ -67,16 +67,6 @@ module HD24Dig
         intermediate_file&.unlink
       end
 
-      def make_filter_complex
-        channel_ids = @channels.map { |c| c.num - 1 }
-        [
-          channel_ids.map { |id| "[#{id}:a]" }.join,
-          "amerge=inputs=#{@channels.count},",
-          "aresample=#{@song.sample_rate},",
-          "pan=mono|c0=#{channel_ids.map { |id| "c#{id}" }.join('+')}",
-        ].join
-      end
-
     end
 
   end
