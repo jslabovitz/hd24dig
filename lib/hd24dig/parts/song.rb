@@ -86,7 +86,7 @@ module HD24Dig
           @fs.seek_sector(block_range.begin)
           block_range.count.times do
             sub_block_samples = [samples_to_read, @num_samples_per_sub_block].min
-            sub_block_bytes = sub_block_samples * 3  #FIXME: don't use constant
+            sub_block_bytes = sub_block_samples * BYTES_PER_SAMPLE
             channel_ios.values.each do |io|
               data = @fs.read_sectors(@num_sectors_per_sub_block) or raise "Unexpected EOF"
               io&.write(data[0, sub_block_bytes])

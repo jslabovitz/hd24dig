@@ -47,7 +47,7 @@ module HD24Dig
             inputs = input_files.map { |f| f.open('rb') }
             until inputs.first.eof do
               inputs.each do |input|
-                data = input.read(3) or break
+                data = input.read(BYTES_PER_SAMPLE) or break
                 output.write(data)
               end
             end
@@ -57,7 +57,7 @@ module HD24Dig
           'sox',
           '--type', 'raw',
           '--rate', @song.sample_rate,
-          '--bits', 24,
+          '--bits', BITS_PER_SAMPLE,
           '--encoding', 'signed-integer',
           '--channels', 1,
           intermediate_file || input_files.first,

@@ -15,7 +15,7 @@ module HD24Dig
     SOX_PARAMS = [
       '--type', 'raw',
       '--encoding', 'signed-integer',
-      '--bits', 24,
+      '--bits', BITS_PER_SAMPLE,
     ]
 
     def pcm_files_equivalent?(file1, file2)
