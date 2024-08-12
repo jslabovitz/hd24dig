@@ -69,40 +69,41 @@ module HD24Dig
         end
       end
 
-      def extract_audio(dir: nil)
-        song_dir = dir&.join(@project.drive.full_name, @project.full_name, full_name)
-        channel_ios = @tracks.map(&:channels).flatten.map do |channel|
-          if dir
-            path = (song_dir / channel.track.full_name / channel.full_name).add_extension('.pcm')
-            path.dirname.mkpath
-            io = path.open('wb')
-          else
-            io = nil
+      def extract_audio(dir: nil, extension: '.wav')
+        if dir
+          @tracks.each do |track|
+            track.dir = dir.join(project.drive.full_name, project.full_name, full_name, track.full_name)
+            track.dir.mkpath
+            track.pcm_file = track.dir.add_extension('.pcm')
+            track.channels.each do |channel|
+              channel.pcm_file = (track.dir / channel.full_name).add_extension('.pcm')
+              channel.io = channel.pcm_file.open('wb')
+            end
           end
-          [channel, io]
-        end.to_h
+        end
         samples_to_read = @num_samples_per_channel
         @block_ranges.each do |block_range|
           @fs.seek_sector(block_range.begin)
           block_range.count.times do
             sub_block_samples = [samples_to_read, @num_samples_per_sub_block].min
             sub_block_bytes = sub_block_samples * BYTES_PER_SAMPLE
-            channel_ios.values.each do |io|
-              data = @fs.read_sectors(@num_sectors_per_sub_block) or raise "Unexpected EOF"
-              io&.write(data[0, sub_block_bytes])
+            @tracks.each do |track|
+              track.channels.each do |channel|
+                data = @fs.read_sectors(@num_sectors_per_sub_block) or raise "Unexpected EOF"
+                channel.io&.write(data[0, sub_block_bytes])
+              end
             end
             samples_to_read -= sub_block_samples
           end
         end
-        channel_ios.values.compact.each(&:close)
         if dir
           @tracks.map do |track|
-            channel_files = track.channels.map { |c| Path.new(channel_ios[c].path) }
-            track_dir = song_dir / track.full_name
-            wav_file = track_dir.add_extension('.wav')
-            track.demux_channels(channel_files, wav_file)
-            track_dir.rmtree
-            wav_file
+            track.channels.each { |c| c.io&.close }
+            track.demux_channels
+            track.dir.rmtree
+            converted_file = (track.pcm_file.actual_size == 0) ? nil : track.extract_audio(extension:)
+            track.pcm_file.unlink
+            converted_file
           end
         end
       end

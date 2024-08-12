@@ -56,6 +56,9 @@ module HD24Dig
 
 end
 
+require_relative 'hd24dig/extensions/path'
+require_relative 'hd24dig/extensions/string'
+
 require_relative 'hd24dig/file_system'
 
 require_relative 'hd24dig/part'

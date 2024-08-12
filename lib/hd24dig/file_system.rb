@@ -20,7 +20,7 @@ module HD24Dig
       @io.read(count * SECTOR_SIZE).tap do |data|
         if @copy_io
           @copy_io.seek(pos)
-          @copy_io.write(data)
+          @copy_io.write(data) unless data.all_zeros?
         end
       end
     end

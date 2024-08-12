@@ -5,6 +5,8 @@ module HD24Dig
     class Channel < Part
 
       ATTRS = %i[
+        pcm_file
+        io
       ]
       attr_accessor *ATTRS
       attr_accessor :track

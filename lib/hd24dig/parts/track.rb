@@ -6,6 +6,9 @@ module HD24Dig
 
       ATTRS = %i[
         channels
+        dir
+        pcm_file
+        io
       ]
       attr_accessor *ATTRS
       attr_accessor :song
@@ -39,20 +42,8 @@ module HD24Dig
         @channel_sample_rate ||= (@song.sample_rate / @channels.count)
       end
 
-      def demux_channels(input_files, output_file)
-        intermediate_file = nil
-        if input_files.length > 1
-          intermediate_file = output_file.replace_extension('.pcm')
-          intermediate_file.open('wb') do |output|
-            inputs = input_files.map { |f| f.open('rb') }
-            until inputs.first.eof do
-              inputs.each do |input|
-                data = input.read(BYTES_PER_SAMPLE) or break
-                output.write(data)
-              end
-            end
-          end
-        end
+      def extract_audio(extension:)
+        out_file = @pcm_file.replace_extension(extension)
         cmd = [
           'sox',
           '--type', 'raw',
@@ -60,11 +51,24 @@ module HD24Dig
           '--bits', BITS_PER_SAMPLE,
           '--encoding', 'signed-integer',
           '--channels', 1,
-          intermediate_file || input_files.first,
-          output_file,
+          @pcm_file,
+          out_file,
         ]
         HD24Dig.run_command(cmd)
-        intermediate_file&.unlink
+        out_file
+      end
+
+      def demux_channels
+        @pcm_file.open('wb') do |output|
+          @channels.each { |c| c.io = c.pcm_file.open('rb') }
+          inputs = @channels.map(&:io)
+          until inputs.first.eof do
+            inputs.each do |input|
+              data = input.read(BYTES_PER_SAMPLE) or break
+              output.write(data)
+            end
+          end
+        end
       end
 
     end
