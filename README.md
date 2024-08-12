@@ -33,9 +33,13 @@
 - Difficulty in referring to project/song names/numbers
 
 
+## Limitations
+
+
 ## Future plans
 
 - make interactive
+- read more of disk
 
 
 ## Contact

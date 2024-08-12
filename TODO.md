@@ -14,8 +14,7 @@
 
 - Document classes.
 - Allow specific tracks to be extracted.
-- Allow songs/tracks to be extracted without creating directory hierary.
-- Skip empty tracks/songs/projects.
+- Allow songs/tracks to be extracted without creating directory hierarchy.
 
 
 ## Later
