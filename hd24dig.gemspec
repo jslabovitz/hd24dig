@@ -12,21 +12,21 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'bindata', '~> 2.5'
+  gem.add_dependency 'bindata', '~> 3.0'
   gem.add_dependency 'path', '~> 2.1'
-  gem.add_dependency 'set_params', '~> 0.2'
-  gem.add_dependency 'simple-command-parser', '~> 1.0'
+  gem.add_dependency 'set_params', '~> 0.3'
+  gem.add_dependency 'simple-command-parser', '~> 1.4'
   gem.add_dependency 'timecode', '~> 2.2'
   gem.add_dependency 'tty-command', '~> 0.10'
   gem.add_dependency 'tty-screen', '~> 0.8'
   gem.add_dependency 'tty-table', '~> 0.12'
 
-  gem.add_development_dependency 'bundler', '~> 2.5'
   gem.add_development_dependency 'midi-mmc', '~> 0.1'
-  gem.add_development_dependency 'minitest', '~> 5.22'
+  gem.add_development_dependency 'minitest', '~> 6.0'
   gem.add_development_dependency 'minitest-power_assert', '~> 0.3'
   gem.add_development_dependency 'pitch', '~> 0.1'
-  gem.add_development_dependency 'rake', '~> 13.2'
+  gem.add_development_dependency 'rake', '~> 13.4'
+  gem.add_development_dependency 'simple-rake-tasks', '~> 0.1'
   gem.add_development_dependency 'unimidi', '~> 0.5'
 
 end
