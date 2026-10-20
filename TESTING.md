@@ -1,5 +1,7 @@
 # Testing notes
 
+NOTE: This is incomplete.
+
 
 ## Building a test rig
 
@@ -17,12 +19,12 @@ Needed components:
 
 Note that if you want to test both low-resolution (48kHz) and high-resolution (96kHz), you will need to either use an HD24XR, or an HD24 with a audio interface connected by ADAT+SMUX, and have the HD24 in DIGITAL input mode.
 
-## Building test harness
+
+## Building the test harness
 
 Check out source repository and install dependencies:
 
-    git clone FIXME
-    bundle update
+    git clone https://github.com/jslabovitz/hd24dig
 
 To build the test harness, type:
 
@@ -40,7 +42,7 @@ Connect an HD24 as described in the listed steps. Then copy the image file to FI
 
     sox -V6 -n -t coreaudio junkname
 
-- Share Internet with Ethernet
+- Share Internet with Ethernet (optional)
   
   - set address on Mac manually to 192.168.2.1
   - set HD24:
@@ -49,6 +51,7 @@ Connect an HD24 as described in the listed steps. Then copy the image file to FI
     - gateway: 000.000.000.000
 
 - Modify tools/test-harness for above
+
 
 ## Set up HD24
 
@@ -64,6 +67,8 @@ Connect an HD24 as described in the listed steps. Then copy the image file to FI
 
 
 ## Record test tones
+
+FIXME
 
 
 ## Update test/test_setup.rb
